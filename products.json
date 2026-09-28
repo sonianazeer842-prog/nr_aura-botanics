@@ -1,0 +1,152 @@
+{
+  "_comment": "=========================================================",
+  "_instructions": "NR AURA BOTANICS - PRODUCT & STORE DATABASE",
+  "_price_guide": "// EDIT PRICE HERE: Modify 'price' (in PKR) for any product below.",
+  "_currency": "PKR",
+  "currencySymbol": "Rs.",
+  "storeInfo": {
+    "brandName": "NR AURA BOTANICS",
+    "domain": "www.nraurabotanics.com",
+    "tagline": "Revitalizes, Strengthens & Stimulates",
+    "facebookUrl": "https://www.facebook.com/share/1F9k6wEBvE/",
+    "instagramUrl": "https://www.instagram.com/nraurabotanics",
+    "whatsappNumber": "+923343562833",
+    "whatsappDisplay": "0334-3562833",
+    "supportEmail": "care@nraurabotanics.com",
+    "location": "Lahore, Pakistan",
+    "shippingFee": 199,
+    "freeShippingThreshold": 2000,
+    "deliveryEstimate": "2-4 Working Days across Pakistan"
+  },
+  "products": [
+    {
+      "id": "botanical-hair-growth-spray-250ml",
+      "name": "Botanical Hair Growth Spray Serum",
+      "tagline": "Revitalizes, Strengthens & Stimulates",
+      "subtitle": "Rosemary, Hibiscus, Amla & Fenugreek Infusion · Floral Printed Label · Fine Mist Spray Cap",
+      "size": "250ml / 8.5 fl oz",
+      "_comment_price": "// EDIT PRICE HERE (Single 250ml Bottle Price in PKR)",
+      "price": 700,
+      "originalPrice": 950,
+      "inStock": true,
+      "stockCount": 65,
+      "isMainProduct": true,
+      "badge": "Signature Bestseller",
+      "image": "/src/assets/images/ref_spray_bottle_1790599300285.jpg",
+      "gallery": [
+        "/src/assets/images/ref_spray_bottle_1790599300285.jpg",
+        "/src/assets/images/ref_hand_bottle_1790599322973.jpg",
+        "/src/assets/images/ref_hero_bottle_1790599312085.jpg",
+        "/src/assets/images/ref_mist_bottle_1790599333736.jpg",
+        "/src/assets/images/ingredients_botanical_tray_1790592793866.jpg"
+      ],
+      "shortDescription": "Our flagship potent botanical elixir presented in a lightweight, shatterproof transparent bottle adorned with handcrafted floral label printing, revealing the pure golden-amber herbal elixir inside. Fitted with an ergonomic fine-mist spray pump cap for mess-free, even root distribution. Infused with active cold-pressed Rosemary, Hibiscus petals, raw Amla, and golden Fenugreek to awaken dormant follicles, fortify hair roots, curb hair shedding, and stimulate thick, resilient hair growth.",
+      "benefits": [
+        "Transparent shatter-resistant bottle featuring artistic botanical floral label artwork",
+        "Luminous golden-amber herbal nectar absorbs rapidly without leaving greasy residue",
+        "Ultra-fine spray cap for effortless, even scalp application without mess",
+        "Generous 250ml size providing extended daily nourishment for just Rs. 700/-",
+        "Revitalizes dormant follicles & accelerates visible new hair growth",
+        "Deeply fortifies roots to drastically reduce seasonal & stress shedding",
+        "Rosemary & Hibiscus complex activates healthy blood circulation",
+        "Amla & Fenugreek soothe dry scalp, relieve itching & eradicate dandruff",
+        "100% natural, sulfate-free, paraben-free, silicone-free & cruelty-free"
+      ],
+      "ingredients": [
+        {
+          "name": "Rosemary Extract & Pure Oil",
+          "role": "Follicle Activator & Circulation",
+          "description": "Clinically proven botanical powerhouse that boosts micro-capillary circulation around hair roots, helping counter thinning, extend anagen growth phase, and darken premature graying."
+        },
+        {
+          "name": "Fresh Hibiscus Blossom",
+          "role": "Natural Keratin & Deep Conditioning",
+          "description": "Abundant in natural amino acids, vitamins A and C, and flavonoids. Strengthens hair keratin, prevents split ends, conditions the cuticle, and imparts luminous natural gloss."
+        },
+        {
+          "name": "Organic Amla (Indian Gooseberry)",
+          "role": "Vitamin C & Root Fortification",
+          "description": "Nature's richest natural source of Vitamin C and essential fatty acids. Nourishes the dermal papilla, builds resistance to breakage, and guards against environmental pollution."
+        },
+        {
+          "name": "Golden Fenugreek (Methi)",
+          "role": "Protein Replenishment & Scalp Health",
+          "description": "Brimming with high protein concentrations, lecithin, and nicotinic acid to reconstruct brittle hair shafts, intensely hydrate parched scalps, and clear stubborn flaking."
+        }
+      ],
+      "howToUse": [
+        {
+          "step": "01",
+          "title": "Section & Spray",
+          "instruction": "Part your dry or damp hair into clean sections. Hold the floral-labeled spray bottle 2-3 inches away and spray 4–6 pumps of the golden-amber botanical elixir directly onto the scalp roots and thinning zones."
+        },
+        {
+          "step": "02",
+          "title": "Invigorate & Massage",
+          "instruction": "Using soft pads of your fingertips (or a wooden scalp massager), massage in circular motions for 3–5 minutes. This awakens dormant follicles and maximizes nutrient absorption."
+        },
+        {
+          "step": "03",
+          "title": "Leave In & Nourish",
+          "instruction": "Allow the herbal water elixir to penetrate for at least 2 hours, or leave in overnight for intensive restorative nourishment. Rinse with a gentle, sulfate-free shampoo."
+        }
+      ]
+    },
+    {
+      "id": "botanical-serum-duo-pack",
+      "name": "Botanical Hair Growth Spray (Duo Pack - 2x250ml)",
+      "tagline": "60-Day Intensive Revitalization Course",
+      "subtitle": "2x 250ml Transparent Spray Bottles · Save Rs. 100",
+      "size": "2 x 250ml (500ml Total)",
+      "_comment_price": "// EDIT PRICE HERE (Duo Pack Price in PKR)",
+      "price": 1300,
+      "originalPrice": 1600,
+      "inStock": true,
+      "stockCount": 38,
+      "isMainProduct": false,
+      "badge": "Most Popular",
+      "image": "/src/assets/images/ref_spray_bottle_1790599300285.jpg",
+      "gallery": [
+        "/src/assets/images/ref_spray_bottle_1790599300285.jpg",
+        "/src/assets/images/ref_hand_bottle_1790599322973.jpg",
+        "/src/assets/images/ref_hero_bottle_1790599312085.jpg",
+        "/src/assets/images/ref_mist_bottle_1790599333736.jpg"
+      ],
+      "shortDescription": "Recommended 60-day consistent growth regimen with two 250ml spray bottles featuring botanical floral printed labels and luminous golden-amber herbal elixir. Ensures uninterrupted follicular nourishment with immediate savings across Pakistan.",
+      "benefits": [
+        "Two full 250ml transparent spray bottles with botanical floral artwork for 60-day density therapy",
+        "Direct Rs. 100 savings compared to individual bottles",
+        "Includes Nationwide Courier Tracking across all cities in Pakistan",
+        "Fresh small-batch cold-pressed bottling"
+      ]
+    },
+    {
+      "id": "botanical-serum-trio-pack",
+      "name": "Botanical Hair Growth Spray (Trio Course - 3x250ml)",
+      "tagline": "3-Month Complete Transformation Course",
+      "subtitle": "3x 250ml Transparent Spray Bottles · Maximum Value & Free Delivery",
+      "size": "3 x 250ml (750ml Total)",
+      "_comment_price": "// EDIT PRICE HERE (Trio Pack Price in PKR)",
+      "price": 1950,
+      "originalPrice": 2500,
+      "inStock": true,
+      "stockCount": 20,
+      "isMainProduct": false,
+      "badge": "Best Value · Free Delivery",
+      "image": "/src/assets/images/ref_spray_bottle_1790599300285.jpg",
+      "gallery": [
+        "/src/assets/images/ref_spray_bottle_1790599300285.jpg",
+        "/src/assets/images/ref_hand_bottle_1790599322973.jpg",
+        "/src/assets/images/ref_hero_bottle_1790599312085.jpg",
+        "/src/assets/images/ingredients_botanical_tray_1790592793866.jpg"
+      ],
+      "shortDescription": "The definitive 90-day biological restoration cycle with three 250ml spray bottles filled with golden-amber botanical elixir with botanical floral labels. Perfect for pronounced thinning, post-partum shedding, or family sharing. Includes free nationwide delivery.",
+      "benefits": [
+        "Full 750ml cellular cycle transformation for chronic hair thinning",
+        "Complimentary FREE Cash on Delivery across Pakistan",
+        "Direct Rs. 550 savings off standard retail",
+        "Personalized hair care consultation via WhatsApp"
+      ]
+    }
+  ]
+}
