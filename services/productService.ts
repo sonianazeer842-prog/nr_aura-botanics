@@ -43,12 +43,12 @@ export const INITIAL_PRODUCTS_DATA: ProductsData = {
       stockCount: 65,
       isMainProduct: true,
       badge: "Signature Bestseller",
-      image: "/src/assets/images/floral_spray_bottle_1790597332500.jpg",
+      image: "/bottle.png",
       gallery: [
-        "/src/assets/images/floral_spray_bottle_1790597332500.jpg",
-        "/src/assets/images/hero_floral_spray_1790597346625.jpg",
-        "/src/assets/images/mist_floral_spray_1790597358705.jpg",
-        "/src/assets/images/ingredients_botanical_tray_1790592793866.jpg"
+        "/bottle.png",
+        "/hero.png",
+        "/mist.png",
+        "/ingredients.png"
       ],
       shortDescription: "Our flagship potent botanical elixir presented in a lightweight, shatterproof transparent bottle adorned with handcrafted floral label printing, revealing the pure golden-amber herbal elixir inside. Fitted with an ergonomic fine-mist spray pump cap for mess-free, even root distribution. Infused with active cold-pressed Rosemary, Hibiscus petals, raw Amla, and golden Fenugreek to awaken dormant follicles, fortify hair roots, curb hair shedding, and stimulate thick, resilient hair growth.",
       benefits: [
@@ -115,11 +115,11 @@ export const INITIAL_PRODUCTS_DATA: ProductsData = {
       stockCount: 38,
       isMainProduct: false,
       badge: "Most Popular",
-      image: "/src/assets/images/floral_spray_bottle_1790597332500.jpg",
+      image: "/bottle.png",
       gallery: [
-        "/src/assets/images/floral_spray_bottle_1790597332500.jpg",
-        "/src/assets/images/hero_floral_spray_1790597346625.jpg",
-        "/src/assets/images/mist_floral_spray_1790597358705.jpg"
+        "/bottle.png",
+        "/hero.png",
+        "/mist.png"
       ],
       shortDescription: "Recommended 60-day consistent growth regimen with two 250ml spray bottles featuring botanical floral printed labels and luminous golden-amber herbal elixir. Ensures uninterrupted follicular nourishment with immediate savings across Pakistan.",
       benefits: [
@@ -141,11 +141,11 @@ export const INITIAL_PRODUCTS_DATA: ProductsData = {
       stockCount: 20,
       isMainProduct: false,
       badge: "Best Value · Free Delivery",
-      image: "/src/assets/images/floral_spray_bottle_1790597332500.jpg",
+      image: "/bottle.png",
       gallery: [
-        "/src/assets/images/floral_spray_bottle_1790597332500.jpg",
-        "/src/assets/images/hero_floral_spray_1790597346625.jpg",
-        "/src/assets/images/ingredients_botanical_tray_1790592793866.jpg"
+        "/bottle.png",
+        "/hero.png",
+        "/ingredients.png"
       ],
       shortDescription: "The definitive 90-day biological restoration cycle with three 250ml spray bottles filled with golden-amber botanical elixir with botanical floral labels. Perfect for pronounced thinning, post-partum shedding, or family sharing. Includes free nationwide delivery.",
       benefits: [
@@ -158,7 +158,7 @@ export const INITIAL_PRODUCTS_DATA: ProductsData = {
   ]
 };
 
-const STORAGE_KEY = 'nr_aura_botanics_products_v6';
+const STORAGE_KEY = 'nr_aura_botanics_products_v7';
 const ADMIN_AUTH_KEY = 'nr_aura_admin_session';
 
 /**

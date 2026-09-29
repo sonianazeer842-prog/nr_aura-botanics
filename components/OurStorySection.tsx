@@ -16,7 +16,7 @@ export const OurStorySection: React.FC = () => {
             <div className="p-8 sm:p-10 rounded-3xl bg-[#F7FAF6]/90 backdrop-blur-md border border-[#D4E7D2] space-y-6">
               <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-sm border-2 border-[#D4AF37]/80 bg-[#163821] flex items-center justify-center">
                 <img
-                  src="/src/assets/images/nr_aura_logo_emblem_1790598527585.jpg"
+                  src="/logo.png"
                   alt="NR AURA BOTANICS Brand Emblem"
                   className="w-full h-full object-cover"
                 />

@@ -100,7 +100,7 @@ export const IngredientsSection: React.FC = () => {
         {/* Botanical Ingredients Photography Banner */}
         <div className="mb-14 rounded-2xl overflow-hidden border border-[#DCE8DB] shadow-md relative bg-white group">
           <img
-            src="/src/assets/images/ingredients_botanical_tray_1790592793866.jpg"
+            src="/ingredients.png"
             alt="Rosemary, Hibiscus, Amla, and Fenugreek raw organic ingredients"
             className="w-full h-64 sm:h-80 md:h-96 object-cover object-center transition-transform duration-700 group-hover:scale-103"
             referrerPolicy="no-referrer"

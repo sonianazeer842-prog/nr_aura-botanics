@@ -54,7 +54,7 @@ export const HowToUseSection: React.FC = () => {
           <div className="lg:col-span-5 order-2 lg:order-1">
             <div className="relative rounded-2xl overflow-hidden border border-[#DCE8DB] shadow-md bg-botanic-sand/50 group">
               <img
-                src="/src/assets/images/ref_mist_bottle_1790599333736.jpg"
+                src="/mist.png"
                 alt="Fine mist spray releasing from NR AURA BOTANICS Botanical Hair Growth Serum bottle"
                 className="w-full h-80 sm:h-96 md:h-[460px] object-cover object-center transition-transform duration-700 group-hover:scale-103"
                 referrerPolicy="no-referrer"

@@ -35,7 +35,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         title="NR AURA BOTANICS Official Logo"
       >
         <img
-          src="/src/assets/images/nr_aura_logo_emblem_1790598527585.jpg"
+          src="/logo.png"
           alt="NR AURA BOTANICS Official Logo"
           className="w-full h-full object-cover object-center scale-105"
           loading="eager"

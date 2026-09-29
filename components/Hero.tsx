@@ -116,7 +116,7 @@ export const Hero: React.FC<HeroProps> = ({ onShopClick }) => {
           <div className="lg:col-span-6">
             <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[#D4E7D2] bg-white/70 backdrop-blur-xs group">
               <img
-                src="/src/assets/images/ref_hero_bottle_1790599312085.jpg"
+                src="/bottle.png"
                 alt="NR AURA BOTANICS 250ml Botanical Hair Growth Serum Spray Bottle with Rosemary, Hibiscus, Amla & Fenugreek"
                 className="w-full h-auto aspect-16/9 sm:aspect-4/3 object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
                 loading="eager"
