@@ -4,8 +4,10 @@
 */
 
 import React from 'react';
+import { useSiteImages } from '../services/imageService';
 
 export const OurStorySection: React.FC = () => {
+  const { images } = useSiteImages();
   return (
     <section id="story" className="py-16 md:py-24 bg-transparent border-b border-[#D4E7D2]/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,8 +18,8 @@ export const OurStorySection: React.FC = () => {
             <div className="p-8 sm:p-10 rounded-3xl bg-[#F7FAF6]/90 backdrop-blur-md border border-[#D4E7D2] space-y-6">
               <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-sm border-2 border-[#D4AF37]/80 bg-[#163821] flex items-center justify-center">
                 <img
-                  src="/logo.png"
-                  alt="NR AURA BOTANICS Brand Emblem"
+                  src={images.logo.src}
+                  alt={images.logo.alt}
                   className="w-full h-full object-cover"
                 />
               </div>

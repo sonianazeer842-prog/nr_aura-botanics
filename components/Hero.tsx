@@ -7,12 +7,17 @@
 
 import React from 'react';
 import { BRAND_HERO_HEADING, BRAND_TAGLINE, WHATSAPP_NUMBER } from '../constants';
+import { ImageItem } from '../types';
+import { useSiteImages } from '../services/imageService';
 
 interface HeroProps {
   onShopClick: () => void;
+  image?: ImageItem;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onShopClick }) => {
+export const Hero: React.FC<HeroProps> = ({ onShopClick, image: propImage }) => {
+  const { images } = useSiteImages();
+  const heroImage = propImage || images.hero;
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, '')}?text=${encodeURIComponent("Assalam o Alaikum, I would like to place an order for NR AURA BOTANICS 250ml Botanical Hair Growth Spray (Rs. 700).")}`;
 
   return (
@@ -116,8 +121,8 @@ export const Hero: React.FC<HeroProps> = ({ onShopClick }) => {
           <div className="lg:col-span-6">
             <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[#D4E7D2] bg-white/70 backdrop-blur-xs group">
               <img
-                src="/bottle.png"
-                alt="NR AURA BOTANICS 250ml Botanical Hair Growth Serum Spray Bottle with Rosemary, Hibiscus, Amla & Fenugreek"
+                src={heroImage.src}
+                alt={heroImage.alt}
                 className="w-full h-auto aspect-16/9 sm:aspect-4/3 object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
                 loading="eager"
                 referrerPolicy="no-referrer"

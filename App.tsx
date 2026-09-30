@@ -22,6 +22,7 @@ import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import Checkout from './components/Checkout';
 import AdminPortal from './components/AdminPortal';
+import AdminImages from './components/AdminImages';
 
 import { CartItem, ProductsData, ViewType } from './types';
 import {
@@ -29,10 +30,14 @@ import {
   fetchAuthoritativeCatalog,
   calculateOrderSecurity
 } from './services/productService';
+import { useSiteImages } from './services/imageService';
 
 export function App() {
   // Store Catalog loaded from products.json / local authoritative service
   const [catalog, setCatalog] = useState<ProductsData>(getAuthoritativeCatalog());
+  
+  // Central site images loaded from images.json / imageService
+  const { images: siteImages, setImages: setSiteImages } = useSiteImages();
   
   // Current active view
   const [view, setView] = useState<ViewType>('store');
@@ -49,21 +54,26 @@ export function App() {
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Sync catalog from /products.json on initial mount
+  // Sync catalog from /products.json on initial mount & handle routing
   useEffect(() => {
     fetchAuthoritativeCatalog().then(data => {
       setCatalog(data);
     });
 
-    // Check if initial route is /admin or hash #admin
+    // Check if initial route is /admin, /admin-images, or hash variants
     const path = window.location.pathname.toLowerCase();
     const hash = window.location.hash.toLowerCase();
-    if (path === '/admin' || hash === '#admin') {
+    if (path === '/admin-images' || hash === '#admin-images' || hash === '#images') {
+      setView('admin-images');
+    } else if (path === '/admin' || hash === '#admin') {
       setView('admin');
     }
 
     const handleHashChange = () => {
-      if (window.location.hash.toLowerCase() === '#admin') {
+      const currentHash = window.location.hash.toLowerCase();
+      if (currentHash === '#admin-images' || currentHash === '#images') {
+        setView('admin-images');
+      } else if (currentHash === '#admin') {
         setView('admin');
       }
     };
@@ -177,7 +187,7 @@ export function App() {
     <div className="min-h-screen bg-pastel-hibiscus font-sans text-botanic-charcoal selection:bg-botanic-pinkLight selection:text-botanic-wood flex flex-col justify-between">
       
       {/* Top Navbar rendered except on checkout or admin */}
-      {view !== 'checkout' && view !== 'admin' && (
+      {view !== 'checkout' && view !== 'admin' && view !== 'admin-images' && (
         <Navbar
           onNavClick={handleNavClick}
           cartCount={totalCartCount}
@@ -235,10 +245,25 @@ export function App() {
           />
         )}
 
+        {/* VIEW 4: Central Image Management (/admin-images) */}
+        {view === 'admin-images' && (
+          <AdminImages
+            images={siteImages}
+            onUpdateImages={(newImgs) => setSiteImages(newImgs)}
+            onExit={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setView('store');
+              try {
+                window.location.hash = '';
+              } catch {}
+            }}
+          />
+        )}
+
       </main>
 
-      {/* Footer rendered except in Admin portal */}
-      {view !== 'admin' && (
+      {/* Footer rendered except in Admin portals */}
+      {view !== 'admin' && view !== 'admin-images' && (
         <>
           <Footer
             onLinkClick={handleNavClick}
@@ -247,6 +272,13 @@ export function App() {
               setView('admin');
               try {
                 window.location.hash = 'admin';
+              } catch {}
+            }}
+            onNavigateAdminImages={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setView('admin-images');
+              try {
+                window.location.hash = 'admin-images';
               } catch {}
             }}
           />

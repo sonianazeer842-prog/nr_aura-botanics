@@ -5,8 +5,17 @@
 */
 
 import React from 'react';
+import { ImageItem } from '../types';
+import { useSiteImages } from '../services/imageService';
 
-export const IngredientsSection: React.FC = () => {
+interface IngredientsSectionProps {
+  image?: ImageItem;
+}
+
+export const IngredientsSection: React.FC<IngredientsSectionProps> = ({ image: propImage }) => {
+  const { images } = useSiteImages();
+  const ingredientsImage = propImage || images.ingredients;
+
   const ingredients = [
     {
       name: "Rosemary",
@@ -100,8 +109,8 @@ export const IngredientsSection: React.FC = () => {
         {/* Botanical Ingredients Photography Banner */}
         <div className="mb-14 rounded-2xl overflow-hidden border border-[#DCE8DB] shadow-md relative bg-white group">
           <img
-            src="/ingredients.png"
-            alt="Rosemary, Hibiscus, Amla, and Fenugreek raw organic ingredients"
+            src={ingredientsImage.src}
+            alt={ingredientsImage.alt}
             className="w-full h-64 sm:h-80 md:h-96 object-cover object-center transition-transform duration-700 group-hover:scale-103"
             referrerPolicy="no-referrer"
           />

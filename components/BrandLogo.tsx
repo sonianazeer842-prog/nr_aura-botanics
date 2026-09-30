@@ -7,20 +7,27 @@
 */
 
 import React from 'react';
+import { ImageItem } from '../types';
+import { useSiteImages } from '../services/imageService';
 
 interface BrandLogoProps {
   className?: string;
   iconOnly?: boolean;
   size?: 'sm' | 'md' | 'lg';
   textColor?: string;
+  image?: ImageItem;
 }
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({
   className = '',
   iconOnly = false,
   size = 'md',
-  textColor
+  textColor,
+  image: propImage
 }) => {
+  const { images } = useSiteImages();
+  const logoImage = propImage || images.logo;
+
   const iconDimensions = {
     sm: 'w-8 h-8',
     md: 'w-10 h-10 sm:w-11 sm:h-11',
@@ -35,8 +42,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         title="NR AURA BOTANICS Official Logo"
       >
         <img
-          src="/logo.png"
-          alt="NR AURA BOTANICS Official Logo"
+          src={logoImage.src}
+          alt={logoImage.alt}
           className="w-full h-full object-cover object-center scale-105"
           loading="eager"
           referrerPolicy="no-referrer"

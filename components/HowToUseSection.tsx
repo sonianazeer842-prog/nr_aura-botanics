@@ -5,8 +5,17 @@
 */
 
 import React from 'react';
+import { ImageItem } from '../types';
+import { useSiteImages } from '../services/imageService';
 
-export const HowToUseSection: React.FC = () => {
+interface HowToUseSectionProps {
+  image?: ImageItem;
+}
+
+export const HowToUseSection: React.FC<HowToUseSectionProps> = ({ image: propImage }) => {
+  const { images } = useSiteImages();
+  const howToUseImage = propImage || images.howToUse;
+
   const steps = [
     {
       number: "01",
@@ -54,8 +63,8 @@ export const HowToUseSection: React.FC = () => {
           <div className="lg:col-span-5 order-2 lg:order-1">
             <div className="relative rounded-2xl overflow-hidden border border-[#DCE8DB] shadow-md bg-botanic-sand/50 group">
               <img
-                src="/mist.png"
-                alt="Fine mist spray releasing from NR AURA BOTANICS Botanical Hair Growth Serum bottle"
+                src={howToUseImage.src}
+                alt={howToUseImage.alt}
                 className="w-full h-80 sm:h-96 md:h-[460px] object-cover object-center transition-transform duration-700 group-hover:scale-103"
                 referrerPolicy="no-referrer"
               />

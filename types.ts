@@ -103,9 +103,29 @@ export interface OrderSubmission {
   grandTotal: number;
 }
 
-export type ViewType = 'store' | 'product-detail' | 'checkout' | 'admin';
+export type ViewType = 'store' | 'product-detail' | 'checkout' | 'admin' | 'admin-images';
 
 export interface ViewState {
   type: ViewType;
   selectedProductId?: string;
+}
+
+export interface ImageItem {
+  src: string;
+  alt: string;
+  title?: string;
+}
+
+export interface GalleryImageItem extends ImageItem {
+  id: string;
+  label?: string;
+}
+
+export interface SiteImages {
+  _comment?: string;
+  hero: ImageItem;
+  howToUse: ImageItem;
+  ingredients: ImageItem;
+  logo: ImageItem;
+  gallery: GalleryImageItem[];
 }

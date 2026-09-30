@@ -9,6 +9,8 @@
 import React, { useState } from 'react';
 import { Product, ProductsData } from '../types';
 import { WHATSAPP_NUMBER } from '../constants';
+import { ProductImageSlider } from './ProductImageSlider';
+import { useSiteImages } from '../services/imageService';
 
 interface FeaturedProductProps {
   catalog: ProductsData;
@@ -21,12 +23,12 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
   onAddToCart,
   onBuyNow
 }) => {
+  const { images } = useSiteImages();
   const products = catalog.products || [];
   const [selectedProductId, setSelectedProductId] = useState<string>(
     products[0]?.id || 'botanical-hair-growth-spray-250ml'
   );
   const [quantity, setQuantity] = useState<number>(1);
-  const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
   const [addedAnimation, setAddedAnimation] = useState(false);
 
   const currentProduct: Product = products.find(p => p.id === selectedProductId) || products[0];
@@ -82,53 +84,14 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
         <div className="bg-[#F7FAF6]/90 backdrop-blur-md rounded-3xl p-6 sm:p-10 border border-[#D4E7D2] shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
             
-            {/* Left Column: Product Gallery */}
+            {/* Left Column: Product Gallery Slider Component */}
             <div className="lg:col-span-6 space-y-4">
-              {/* Primary Main Image Frame */}
-              <div className="relative aspect-square sm:aspect-4/3 rounded-2xl overflow-hidden bg-white/80 border border-[#D4E7D2] shadow-xs group">
-                <img
-                  src={gallery[activeImageIndex] || currentProduct.image}
-                  alt={currentProduct.name}
-                  className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                  referrerPolicy="no-referrer"
-                />
-
-                {/* Stock Badge */}
-                <div className="absolute top-4 left-4 bg-botanic-leafDark text-white text-[11px] font-semibold tracking-wider uppercase px-3 py-1 rounded shadow-xs">
-                  {currentProduct.inStock ? `In Stock · 250ml Spray Bottle` : 'Out of Stock'}
-                </div>
-
-                {/* Price / Saving Tag */}
-                {discountPercentage > 0 && (
-                  <div className="absolute top-4 right-4 bg-botanic-pink text-white text-xs font-bold px-2.5 py-1 rounded shadow-xs">
-                    Save {discountPercentage}%
-                  </div>
-                )}
-              </div>
-
-              {/* Thumbnail Navigation */}
-              {gallery.length > 1 && (
-                <div className="flex items-center gap-3 overflow-x-auto pb-2">
-                  {gallery.map((imgUrl, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setActiveImageIndex(idx)}
-                      className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
-                        activeImageIndex === idx
-                          ? 'border-botanic-leaf shadow-sm scale-102 ring-2 ring-botanic-leaf/20'
-                          : 'border-[#D4E7D2] opacity-70 hover:opacity-100 bg-white'
-                      }`}
-                    >
-                      <img
-                        src={imgUrl}
-                        alt={`Thumbnail ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                        referrerPolicy="no-referrer"
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
+              <ProductImageSlider
+                galleryItems={images.gallery}
+                productName={currentProduct.name}
+                inStock={currentProduct.inStock}
+                discountPercentage={discountPercentage}
+              />
 
               {/* Quality Guarantees Bar */}
               <div className="p-4 rounded-xl bg-white/70 border border-[#D4E7D2] grid grid-cols-3 gap-2 text-center text-xs text-botanic-wood">
@@ -206,7 +169,6 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
                         key={p.id}
                         onClick={() => {
                           setSelectedProductId(p.id);
-                          setActiveImageIndex(0);
                         }}
                         className={`p-3 rounded-xl text-left border transition-all relative ${
                           isSelected
