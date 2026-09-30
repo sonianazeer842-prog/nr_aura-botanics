@@ -197,6 +197,13 @@ export function App() {
             setView('store');
           }}
           onNavigateAdmin={() => setView('admin')}
+          onNavigateAdminImages={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setView('admin-images');
+            try {
+              window.location.hash = 'admin-images';
+            } catch {}
+          }}
         />
       )}
 

@@ -20,6 +20,23 @@
     "alt": "NR AURA BOTANICS Emblem Logo",
     "title": "Brand Official Logo"
   },
+  "products": {
+    "single": {
+      "src": "/product-original.png",
+      "alt": "Single 250ml Spray Bottle",
+      "title": "Single Bottle (250ml)"
+    },
+    "duo": {
+      "src": "/product-original.png",
+      "alt": "Duo Pack 2x250ml Spray Bottles",
+      "title": "Duo Course (2x250ml)"
+    },
+    "trio": {
+      "src": "/product-original.png",
+      "alt": "Trio Pack 3x250ml Spray Bottles",
+      "title": "Trio Transformation Course (3x250ml)"
+    }
+  },
   "gallery": [
     {
       "id": "lifestyle-1",

@@ -15,6 +15,7 @@ interface NavbarProps {
   onOpenCart: () => void;
   onNavigateHome: () => void;
   onNavigateAdmin?: () => void;
+  onNavigateAdminImages?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -22,7 +23,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   cartCount,
   onOpenCart,
   onNavigateHome,
-  onNavigateAdmin
+  onNavigateAdmin,
+  onNavigateAdminImages
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -163,6 +165,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                 )}
               </button>
 
+              {/* Admin Images Manager Quick Button */}
+              {onNavigateAdminImages && (
+                <button
+                  type="button"
+                  onClick={onNavigateAdminImages}
+                  className="p-1.5 text-botanic-wood/70 hover:text-botanic-leaf hover:bg-botanic-leafSoft/60 transition-all rounded-lg"
+                  title="इमेज मैनेजर खोलें (Change Website Pictures)"
+                  aria-label="Image Manager"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </button>
+              )}
+
               {/* Mobile Hamburger Toggle */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -228,6 +245,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               Customer Reviews
             </a>
+            {onNavigateAdminImages && (
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onNavigateAdminImages();
+                }}
+                className="w-full text-left py-2 text-sm font-semibold text-botanic-leaf flex items-center gap-2 border-b border-[#DCE8DB]"
+              >
+                <span>🖼️ इमेज व तस्वीरें बदलें (Image Manager)</span>
+              </button>
+            )}
             <div className="pt-2 flex flex-col gap-2">
               <a
                 href={whatsappOrderUrl}

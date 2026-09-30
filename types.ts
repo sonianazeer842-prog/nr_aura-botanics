@@ -127,5 +127,10 @@ export interface SiteImages {
   howToUse: ImageItem;
   ingredients: ImageItem;
   logo: ImageItem;
+  products?: {
+    single: ImageItem;
+    duo: ImageItem;
+    trio: ImageItem;
+  };
   gallery: GalleryImageItem[];
 }
