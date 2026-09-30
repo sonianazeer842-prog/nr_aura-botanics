@@ -30,7 +30,6 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
   // Local editable draft of site images
   const [siteImages, setSiteImages] = useState<SiteImages>(() => {
-    // Ensure products sub-object exists
     return {
       ...initialImages,
       products: initialImages.products || {
@@ -53,7 +52,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
       setIsAuthenticated(true);
       setAuthError('');
     } else {
-      setAuthError('गलत पासवर्ड। सही एडमिन पासकोड दर्ज करें।');
+      setAuthError('Incorrect passcode. Please enter the valid admin passcode.');
     }
   };
 
@@ -88,7 +87,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
     const res = await uploadImageFile(file, `${key}-${Date.now()}.${file.name.split('.').pop()}`);
     if (res.success) {
       handleUpdateCore(key, 'src', res.url);
-      showNotification(`फोटो अपलोड हो गई! सेव करने के लिए नीचे 'परमानेंटली सेव करें' दबाएं।`, 'success');
+      showNotification(`Image uploaded! Click "Save Changes Permanently" to lock it into your site.`, 'success');
     } else {
       showNotification(res.message, 'error');
     }
@@ -116,13 +115,13 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
     const res = await uploadImageFile(file, `pack-${pack}-${Date.now()}.${file.name.split('.').pop()}`);
     if (res.success) {
       handleUpdateProductPack(pack, 'src', res.url);
-      showNotification(`पैक फोटो अपलोड हो गई!`, 'success');
+      showNotification(`Product pack photo uploaded!`, 'success');
     } else {
       showNotification(res.message, 'error');
     }
   };
 
-  // Gallery Drag & Drop
+  // Gallery Drag & Drop Reordering
   const handleDragStart = (index: number) => {
     setDraggedIndex(index);
   };
@@ -169,7 +168,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
     const res = await uploadImageFile(file, `lifestyle-${index + 1}-${Date.now()}.${file.name.split('.').pop()}`);
     if (res.success) {
       handleUpdateGalleryItem(index, 'src', res.url);
-      showNotification(`स्लाइड ${index + 1} की नई फोटो लोड हो गई!`, 'success');
+      showNotification(`Slide ${index + 1} photo loaded!`, 'success');
     } else {
       showNotification(res.message, 'error');
     }
@@ -177,16 +176,16 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
   const handleDeleteGalleryItem = (index: number) => {
     if (siteImages.gallery.length <= 1) {
-      showNotification('कम से कम 1 स्लाइड का होना आवश्यक है।', 'error');
+      showNotification('At least 1 slide is required in the slider.', 'error');
       return;
     }
     const item = siteImages.gallery[index];
-    if (window.confirm(`क्या आप इस स्लाइड (${item.label || `स्लाइड ${index + 1}`}) को हटाना चाहते हैं?`)) {
+    if (window.confirm(`Are you sure you want to remove "${item.label || `Slide ${index + 1}`}" from the slider?`)) {
       setSiteImages(prev => ({
         ...prev,
         gallery: prev.gallery.filter((_, idx) => idx !== index)
       }));
-      showNotification('स्लाइड हटा दी गई।', 'info');
+      showNotification('Slide removed from gallery.', 'info');
     }
   };
 
@@ -195,14 +194,14 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
     const newItem: GalleryImageItem = {
       id: newId,
       src: '/lifestyle-1.jpg',
-      alt: 'New Lifestyle Presentation',
+      alt: 'New Lifestyle Placement',
       label: `Lifestyle Slide ${siteImages.gallery.length + 1}`
     };
     setSiteImages(prev => ({
       ...prev,
       gallery: [...prev.gallery, newItem]
     }));
-    showNotification('नई स्लाइड जोड़ दी गई है! आप इसमें अपनी फोटो अपलोड कर सकते हैं।', 'success');
+    showNotification('New slide added to gallery! You can now upload your custom image.', 'success');
   };
 
   // SAVE CHANGES PERMANENTLY
@@ -213,19 +212,19 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
     if (result.success) {
       onUpdateImages(siteImages);
-      showNotification('✅ आपकी सभी तस्वीरें परमानेंटली सेव हो गई हैं! यह कभी पुरानी बेस पिक्चर पर वापस नहीं जाएंगी।', 'success');
+      showNotification('All images saved permanently! Changes will never revert to an old base picture.', 'success');
     } else {
       showNotification(result.message, 'error');
     }
   };
 
-  // Force sync from Vercel
+  // Force sync from Vercel / server
   const handleForceSyncServer = async () => {
-    if (window.confirm('क्या आप Vercel के images.json फ़ाइल से ताज़ा तस्वीरें लोड करना चाहते हैं?')) {
+    if (window.confirm('Do you want to reload the latest images.json from Vercel / server?')) {
       const serverImgs = await fetchAuthoritativeImages(true);
       setSiteImages(serverImgs);
       onUpdateImages(serverImgs);
-      showNotification('Vercel से नवीनतम images.json तस्वीरें सिंक कर ली गई हैं।', 'success');
+      showNotification('Refreshed images from server images.json.', 'success');
     }
   };
 
@@ -236,18 +235,18 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
         <div className="max-w-md w-full bg-[#162018] rounded-3xl p-8 border border-[#27382A] shadow-2xl">
           <div className="text-center mb-6">
             <span className="text-xs uppercase tracking-widest text-[#D4AF37] font-semibold block mb-1">
-              वेबसाइट ओनर / एडमिन पोर्टल
+              Store Owner & Admin Portal
             </span>
             <h1 className="font-serif text-2xl font-bold text-white">Central Image Manager</h1>
             <p className="text-xs text-stone-400 mt-2">
-              वेबसाइट की हर एक तस्वीर बदलने और परमानेंटली सेव करने के लिए लॉगिन करें।
+              Sign in to manage all website images and permanently customize product placements.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-stone-300 mb-1">
-                Admin Passcode (पासकोड)
+                Admin Passcode
               </label>
               <input
                 type="password"
@@ -267,7 +266,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               type="submit"
               className="w-full py-3 bg-[#1D4A2B] hover:bg-[#256138] text-[#D4AF37] font-bold rounded-xl border border-[#D4AF37]/40 shadow-lg transition-all"
             >
-              ओनर पोर्टल खोलें
+              Open Owner Portal
             </button>
 
             <button
@@ -275,7 +274,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               onClick={handleQuickUnlock}
               className="w-full py-2 bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs rounded-xl transition-all"
             >
-              Quick Unlock (1-क्लिक एक्सेस)
+              Quick Unlock (1-Click Session)
             </button>
           </form>
 
@@ -285,7 +284,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               onClick={onExit}
               className="text-xs text-stone-400 hover:text-white underline"
             >
-              &larr; वापस वेबसाइट पर जाएं
+              &larr; Return to Storefront
             </button>
           </div>
         </div>
@@ -309,7 +308,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 NR AURA BOTANICS · ADMIN IMAGE CONTROLLER
               </span>
               <h1 className="text-base sm:text-lg font-serif font-bold text-white">
-                सेंट्रल इमेज मैनेजमेंट (कोई बेस पिक्चर नहीं - हर तस्वीर आपकी अपनी होगी)
+                Central Image Management (Zero Base Images — All Custom & Permanent)
               </h1>
             </div>
           </div>
@@ -326,7 +325,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M5 13l4 4L19 7" />
               </svg>
-              <span>{isSaving ? 'सेव हो रहा है...' : 'परमानेंटली सेव करें (Save Changes)'}</span>
+              <span>{isSaving ? 'Saving...' : 'Save Changes Permanently'}</span>
             </button>
 
             <button
@@ -355,7 +354,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               onClick={onExit}
               className="px-3.5 py-2 bg-stone-700 hover:bg-stone-600 text-white text-xs font-bold rounded-xl transition-all"
             >
-              &larr; वापस स्टोर पर जाएं
+              &larr; Return to Store
             </button>
           </div>
         </div>
@@ -371,7 +370,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 : 'text-stone-400 hover:text-white bg-stone-800/60'
             }`}
           >
-            🌸 लाइफस्टाइल स्लाइडर ({siteImages.gallery.length} तस्वीरें)
+            🌸 Lifestyle Slider ({siteImages.gallery.length} Images)
           </button>
           <button
             type="button"
@@ -382,7 +381,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 : 'text-stone-400 hover:text-white bg-stone-800/60'
             }`}
           >
-            🌿 हीरो, इस्तेमाल और सामग्री (Hero, How-To, Ingredients, Logo)
+            🌿 Core Sections (Hero, How-To, Ingredients, Logo)
           </button>
           <button
             type="button"
@@ -393,7 +392,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 : 'text-stone-400 hover:text-white bg-stone-800/60'
             }`}
           >
-            📦 प्रोडक्ट पैकेज तस्वीरें (Single, Duo, Trio)
+            📦 Product Packages (Single, Duo, Trio)
           </button>
           <button
             type="button"
@@ -404,7 +403,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 : 'text-stone-400 hover:text-white bg-stone-800/60'
             }`}
           >
-            💡 वर्सेल गाइड (Vercel & GitHub Guide)
+            💡 Vercel & GitHub Guide
           </button>
         </div>
       </header>
@@ -431,10 +430,10 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
             <div className="flex flex-wrap items-center justify-between gap-4 bg-[#141F16] p-4 rounded-2xl border border-[#253A28]">
               <div>
                 <h2 className="text-base sm:text-lg font-serif font-bold text-white">
-                  लाइफस्टाइल प्रॉडक्ट स्लाइडर तस्वीरें (Lifestyle Placements)
+                  Featured Product Slider Placements
                 </h2>
                 <p className="text-xs text-stone-300 mt-1">
-                  यहाँ आप किसी भी स्लाइड की तस्वीर बदल सकते हैं, नई तस्वीर अपलोड कर सकते हैं, ड्रैग करके आगे-पीछे कर सकते हैं।
+                  Replace any slide image, upload new photos from your phone/computer, reorder slides using drag-and-drop, or customize slide labels.
                 </p>
               </div>
               <button
@@ -445,7 +444,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
-                <span>+ नई स्लाइड जोड़ें</span>
+                <span>+ Add New Slide</span>
               </button>
             </div>
 
@@ -469,7 +468,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                       {/* Top Bar: Slide Number & Move Controls */}
                       <div className="flex items-center justify-between text-xs">
                         <span className="px-2.5 py-1 bg-black/60 rounded-full font-bold text-[#9ED8A2] border border-[#3E5C42]">
-                          स्लाइड #{idx + 1}
+                          Slide #{idx + 1}
                         </span>
                         <div className="flex items-center gap-1">
                           <button
@@ -510,7 +509,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                           referrerPolicy="no-referrer"
                         />
                         <label className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-xs font-semibold cursor-pointer transition-opacity">
-                          <span>नई फोटो अपलोड करें (Upload Photo)</span>
+                          <span>Upload New Photo</span>
                           <input
                             type="file"
                             accept="image/*"
@@ -524,7 +523,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                       <div className="space-y-2 text-xs">
                         <div>
                           <label className="block text-stone-400 font-semibold mb-0.5">
-                            स्लाइड का नाम / लेबल (Slide Label)
+                            Slide Label (Shown in slider)
                           </label>
                           <input
                             type="text"
@@ -537,7 +536,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
                         <div>
                           <label className="block text-stone-400 font-semibold mb-0.5">
-                            तस्वीर का पाथ या वेब लिंक (Image Path or Link URL)
+                            Image Path or Web Link URL
                           </label>
                           <input
                             type="text"
@@ -550,7 +549,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
                         <div>
                           <label className="block text-stone-400 font-semibold mb-0.5">
-                            विवरण (Alt Text)
+                            Alt Description (SEO & Accessibility)
                           </label>
                           <input
                             type="text"
@@ -565,9 +564,9 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
                     {/* Bottom Actions */}
                     <div className="mt-3 pt-2 border-t border-[#233526] flex items-center justify-between text-[11px]">
-                      <span className="text-stone-400">ड्रैग करके क्रम बदलें</span>
+                      <span className="text-stone-400">Drag card to reorder</span>
                       <label className="px-2.5 py-1 bg-[#2E7D46]/80 hover:bg-[#2E7D46] text-white rounded-md cursor-pointer font-medium transition-all">
-                        अपलोड करें
+                        Upload
                         <input
                           type="file"
                           accept="image/*"
@@ -588,10 +587,10 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
           <section className="space-y-4">
             <div className="bg-[#141F16] p-4 rounded-2xl border border-[#253A28]">
               <h2 className="text-base sm:text-lg font-serif font-bold text-white">
-                वेबसाइट के मुख्य सेक्शन्स की तस्वीरें (Core Website Images)
+                Core Website Section Images
               </h2>
               <p className="text-xs text-stone-300 mt-1">
-                हीरो बॉटल, हाउ-टू-यूज रूटीन, इंग्रीडिएंट्स बैनर और ऑफिशियल लोगो — आप इनमें से किसी भी तस्वीर को अपनी मनचाही तस्वीर से बदल सकते हैं।
+                Customize key imagery powering the Hero header, How-To-Use routine, Botanical Ingredients banner, and Official Brand Logo.
               </p>
             </div>
 
@@ -600,9 +599,9 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               {/* 1. Hero Bottle */}
               <div className="bg-[#152017] rounded-2xl p-4 border border-[#283C2A] space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white">1. हीरो बॉटल (Hero)</span>
+                  <span className="font-bold text-white">1. Hero Bottle</span>
                   <span className="text-[10px] uppercase tracking-wider text-[#9ED8A2] bg-black/40 px-2 py-0.5 rounded">
-                    हेडर सेशल
+                    Header
                   </span>
                 </div>
 
@@ -614,7 +613,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                     referrerPolicy="no-referrer"
                   />
                   <label className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-xs font-semibold cursor-pointer transition-opacity">
-                    <span>हीरो फोटो बदलें</span>
+                    <span>Replace Hero Photo</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -626,7 +625,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
                 <div className="space-y-2 text-xs">
                   <div>
-                    <label className="block text-stone-400 font-semibold mb-0.5">पाथ या लिंक (URL)</label>
+                    <label className="block text-stone-400 font-semibold mb-0.5">Path or URL</label>
                     <input
                       type="text"
                       value={siteImages.hero.src}
@@ -646,7 +645,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 </div>
 
                 <label className="block w-full text-center py-1.5 bg-stone-800 hover:bg-stone-700 text-white rounded-lg text-xs font-semibold cursor-pointer">
-                  कंप्यूटर/फ़ोन से अपलोड करें
+                  Upload from Device
                   <input
                     type="file"
                     accept="image/*"
@@ -659,9 +658,9 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               {/* 2. How To Use */}
               <div className="bg-[#152017] rounded-2xl p-4 border border-[#283C2A] space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white">2. हाउ-टू-यूज (How To Use)</span>
+                  <span className="font-bold text-white">2. How To Use Routine</span>
                   <span className="text-[10px] uppercase tracking-wider text-[#9ED8A2] bg-black/40 px-2 py-0.5 rounded">
-                    रूटीन
+                    Ritual
                   </span>
                 </div>
 
@@ -673,7 +672,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                     referrerPolicy="no-referrer"
                   />
                   <label className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-xs font-semibold cursor-pointer transition-opacity">
-                    <span>रूटीन फोटो बदलें</span>
+                    <span>Replace Routine Photo</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -685,7 +684,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
                 <div className="space-y-2 text-xs">
                   <div>
-                    <label className="block text-stone-400 font-semibold mb-0.5">पाथ या लिंक (URL)</label>
+                    <label className="block text-stone-400 font-semibold mb-0.5">Path or URL</label>
                     <input
                       type="text"
                       value={siteImages.howToUse.src}
@@ -705,7 +704,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 </div>
 
                 <label className="block w-full text-center py-1.5 bg-stone-800 hover:bg-stone-700 text-white rounded-lg text-xs font-semibold cursor-pointer">
-                  कंप्यूटर/फ़ोन से अपलोड करें
+                  Upload from Device
                   <input
                     type="file"
                     accept="image/*"
@@ -718,9 +717,9 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               {/* 3. Ingredients Banner */}
               <div className="bg-[#152017] rounded-2xl p-4 border border-[#283C2A] space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white">3. सामग्री बैनर (Ingredients)</span>
+                  <span className="font-bold text-white">3. Ingredients Banner</span>
                   <span className="text-[10px] uppercase tracking-wider text-[#9ED8A2] bg-black/40 px-2 py-0.5 rounded">
-                    बैनर
+                    Botanicals
                   </span>
                 </div>
 
@@ -732,7 +731,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                     referrerPolicy="no-referrer"
                   />
                   <label className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-xs font-semibold cursor-pointer transition-opacity">
-                    <span>बैनर फोटो बदलें</span>
+                    <span>Replace Banner Photo</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -744,7 +743,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
                 <div className="space-y-2 text-xs">
                   <div>
-                    <label className="block text-stone-400 font-semibold mb-0.5">पाथ या लिंक (URL)</label>
+                    <label className="block text-stone-400 font-semibold mb-0.5">Path or URL</label>
                     <input
                       type="text"
                       value={siteImages.ingredients.src}
@@ -764,7 +763,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 </div>
 
                 <label className="block w-full text-center py-1.5 bg-stone-800 hover:bg-stone-700 text-white rounded-lg text-xs font-semibold cursor-pointer">
-                  कंप्यूटर/फ़ोन से अपलोड करें
+                  Upload from Device
                   <input
                     type="file"
                     accept="image/*"
@@ -777,9 +776,9 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               {/* 4. Brand Official Logo */}
               <div className="bg-[#152017] rounded-2xl p-4 border border-[#283C2A] space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white">4. ऑफिशियल लोगो (Logo)</span>
+                  <span className="font-bold text-white">4. Official Logo</span>
                   <span className="text-[10px] uppercase tracking-wider text-[#9ED8A2] bg-black/40 px-2 py-0.5 rounded">
-                    लोगो
+                    Emblem
                   </span>
                 </div>
 
@@ -791,7 +790,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                     referrerPolicy="no-referrer"
                   />
                   <label className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-xs font-semibold cursor-pointer transition-opacity">
-                    <span>लोगो बदलें</span>
+                    <span>Replace Logo</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -803,7 +802,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
                 <div className="space-y-2 text-xs">
                   <div>
-                    <label className="block text-stone-400 font-semibold mb-0.5">पाथ या लिंक (URL)</label>
+                    <label className="block text-stone-400 font-semibold mb-0.5">Path or URL</label>
                     <input
                       type="text"
                       value={siteImages.logo.src}
@@ -823,7 +822,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 </div>
 
                 <label className="block w-full text-center py-1.5 bg-stone-800 hover:bg-stone-700 text-white rounded-lg text-xs font-semibold cursor-pointer">
-                  कंप्यूटर/फ़ोन से अपलोड करें
+                  Upload from Device
                   <input
                     type="file"
                     accept="image/*"
@@ -842,10 +841,10 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
           <section className="space-y-4">
             <div className="bg-[#141F16] p-4 rounded-2xl border border-[#253A28]">
               <h2 className="text-base sm:text-lg font-serif font-bold text-white">
-                प्रोडक्ट पैकेज की तस्वीरें (Product Packages: Single, Duo, Trio)
+                Product Package Images (Single, Duo, Trio)
               </h2>
               <p className="text-xs text-stone-300 mt-1">
-                अगर आप 1 बोतल (Rs. 700), 2 बोतल (Rs. 1,300), या 3 बोतल (Rs. 1,950) कोर्स के लिए अलग-अलग कस्टम तस्वीरें लगाना चाहती हैं तो यहाँ से सेट करें।
+                Customize separate dedicated pack images for 1 bottle (Rs. 700), 2 bottles (Rs. 1,300), or 3 bottles (Rs. 1,950).
               </p>
             </div>
 
@@ -854,7 +853,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               {/* Single Bottle Pack */}
               <div className="bg-[#152017] rounded-2xl p-5 border border-[#283C2A] space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white">1 बोतल (Single 250ml Bottle)</span>
+                  <span className="font-bold text-white">Single 250ml Spray Bottle</span>
                   <span className="text-[#9ED8A2] font-semibold">Rs. 700/-</span>
                 </div>
 
@@ -866,7 +865,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                     referrerPolicy="no-referrer"
                   />
                   <label className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-xs font-semibold cursor-pointer transition-opacity">
-                    <span>फोटो अपलोड करें</span>
+                    <span>Upload Photo</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -878,7 +877,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
                 <div className="space-y-2 text-xs">
                   <div>
-                    <label className="block text-stone-400 font-semibold mb-0.5">फोटो का लिंक या पाथ</label>
+                    <label className="block text-stone-400 font-semibold mb-0.5">Image Path or URL</label>
                     <input
                       type="text"
                       value={siteImages.products?.single?.src || ''}
@@ -890,7 +889,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 </div>
 
                 <label className="block w-full text-center py-2 bg-stone-800 hover:bg-stone-700 text-white rounded-lg text-xs font-semibold cursor-pointer">
-                  फ़ोन / कंप्यूटर से अपलोड करें
+                  Upload from Device
                   <input
                     type="file"
                     accept="image/*"
@@ -903,7 +902,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               {/* Duo Pack */}
               <div className="bg-[#152017] rounded-2xl p-5 border border-[#283C2A] space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white">2 बोतल (Duo Pack 2x250ml)</span>
+                  <span className="font-bold text-white">Duo Pack (2x 250ml)</span>
                   <span className="text-[#9ED8A2] font-semibold">Rs. 1,300/-</span>
                 </div>
 
@@ -915,7 +914,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                     referrerPolicy="no-referrer"
                   />
                   <label className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-xs font-semibold cursor-pointer transition-opacity">
-                    <span>Duo फोटो अपलोड करें</span>
+                    <span>Upload Duo Photo</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -927,7 +926,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
                 <div className="space-y-2 text-xs">
                   <div>
-                    <label className="block text-stone-400 font-semibold mb-0.5">फोटो का लिंक या पाथ</label>
+                    <label className="block text-stone-400 font-semibold mb-0.5">Image Path or URL</label>
                     <input
                       type="text"
                       value={siteImages.products?.duo?.src || ''}
@@ -939,7 +938,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 </div>
 
                 <label className="block w-full text-center py-2 bg-stone-800 hover:bg-stone-700 text-white rounded-lg text-xs font-semibold cursor-pointer">
-                  फ़ोन / कंप्यूटर से अपलोड करें
+                  Upload from Device
                   <input
                     type="file"
                     accept="image/*"
@@ -952,7 +951,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
               {/* Trio Pack */}
               <div className="bg-[#152017] rounded-2xl p-5 border border-[#283C2A] space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white">3 बोतल (Trio Course 3x250ml)</span>
+                  <span className="font-bold text-white">Trio Course (3x 250ml)</span>
                   <span className="text-[#9ED8A2] font-semibold">Rs. 1,950/-</span>
                 </div>
 
@@ -964,7 +963,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                     referrerPolicy="no-referrer"
                   />
                   <label className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white text-xs font-semibold cursor-pointer transition-opacity">
-                    <span>Trio फोटो अपलोड करें</span>
+                    <span>Upload Trio Photo</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -976,7 +975,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
 
                 <div className="space-y-2 text-xs">
                   <div>
-                    <label className="block text-stone-400 font-semibold mb-0.5">फोटो का लिंक या पाथ</label>
+                    <label className="block text-stone-400 font-semibold mb-0.5">Image Path or URL</label>
                     <input
                       type="text"
                       value={siteImages.products?.trio?.src || ''}
@@ -988,7 +987,7 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
                 </div>
 
                 <label className="block w-full text-center py-2 bg-stone-800 hover:bg-stone-700 text-white rounded-lg text-xs font-semibold cursor-pointer">
-                  फ़ोन / कंप्यूटर से अपलोड करें
+                  Upload from Device
                   <input
                     type="file"
                     accept="image/*"
@@ -1002,82 +1001,80 @@ export const AdminImages: React.FC<AdminImagesProps> = ({
           </section>
         )}
 
-        {/* TAB 4: Vercel & GitHub Guide */}
+        {/* TAB 4: Owner Guide for Vercel & GitHub */}
         {activeTab === 'guide' && (
-          <section className="bg-[#141F16] rounded-3xl p-6 sm:p-8 border border-[#253A28] space-y-6">
+          <section className="bg-[#141F16] rounded-2xl p-6 border border-[#253A28] space-y-6">
             <div>
-              <span className="text-xs uppercase tracking-widest text-[#9ED8A2] font-bold block mb-1">
-                ओनर निर्देश (Owner Guide)
+              <span className="text-xs uppercase tracking-wider text-[#9ED8A2] font-semibold">
+                Owner Instructions
               </span>
-              <h2 className="text-xl font-serif font-bold text-white">
-                Vercel पर तस्वीरों को परमानेंटली लाइव रखने का सबसे आसान तरीका
+              <h2 className="text-lg font-serif font-bold text-white mt-1">
+                How to Keep Images Permanently Live on Vercel
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-stone-300">
-              <div className="bg-[#1B291D] p-5 rounded-2xl border border-[#2B402F] space-y-3">
-                <h3 className="font-bold text-sm text-[#9ED8A2] flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#2E7D46] text-white flex items-center justify-center font-mono">1</span>
-                  तरीका 1: इस पैनल से सीधे बदलें (Direct Live Update)
-                </h3>
+              <div className="p-4 rounded-xl bg-black/40 border border-[#283C2A] space-y-2">
+                <span className="font-bold text-[#9ED8A2] text-sm block">
+                  Method 1: Direct Live Updates from This Panel
+                </span>
                 <p className="leading-relaxed">
-                  आप अपने फ़ोन या लैपटॉप से सीधे इस पैनल में कोई भी तस्वीर अपलोड करें या इंटरनेट लिंक पेस्ट करें और <strong>"परमानेंटली सेव करें"</strong> पर क्लिक करें।
+                  Upload any photo from your phone/laptop or paste any image URL into this portal, then click <strong>"Save Changes Permanently"</strong>.
                 </p>
-                <p className="leading-relaxed text-[#9ED8A2]">
-                  यह आपके ब्राउज़र में हमेशा के लिए लॉक हो जाएगा और कभी किसी पुरानी बेस पिक्चर पर वापस नहीं जाएगा।
+                <p className="leading-relaxed text-stone-400">
+                  Your customized images are locked in your browser and will never revert to an old base picture.
                 </p>
               </div>
 
-              <div className="bg-[#1B291D] p-5 rounded-2xl border border-[#2B402F] space-y-3">
-                <h3 className="font-bold text-sm text-[#9ED8A2] flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#2E7D46] text-white flex items-center justify-center font-mono">2</span>
-                  तरीका 2: Vercel / GitHub पर सभी के लिए हमेशा लाइव रखना
-                </h3>
+              <div className="p-4 rounded-xl bg-black/40 border border-[#283C2A] space-y-2">
+                <span className="font-bold text-[#9ED8A2] text-sm block">
+                  Method 2: Permanent Live Deployment for All Vercel Customers
+                </span>
                 <p className="leading-relaxed">
-                  जब आप यहाँ अपनी मनपसंद तस्वीरें सेट कर लें, तो ऊपर <strong>"Download images.json for Vercel"</strong> बटन दबाएं।
+                  After customizing your pictures here, click <strong>"Download images.json for Vercel"</strong> in the top bar.
                 </p>
                 <p className="leading-relaxed">
-                  यह डाउनलोड की हुई <code>images.json</code> फ़ाइल को अपने GitHub रिपॉजिटरी के <code>public/images.json</code> में रिप्लेस (अपलोड) कर दें।
+                  Upload that <code>images.json</code> file to replace <code>public/images.json</code> in your GitHub repository.
                 </p>
                 <p className="leading-relaxed text-[#9ED8A2]">
-                  Vercel 10 सेकंड में पूरी दुनिया और आपके सभी ग्राहकों के लिए नई तस्वीरें लाइव कर देगा! आपको कोई कोड बदलने की जरूरत नहीं है।
+                  Vercel will auto-deploy within 10 seconds for all visitors worldwide without touching a single line of code!
                 </p>
               </div>
             </div>
 
-            <div className="p-4 bg-black/40 rounded-xl border border-stone-700 flex items-center justify-between">
-              <span className="text-xs text-stone-400">
-                वर्तमान JSON फ़ाइल की एक कॉपी अपने क्लिपबोर्ड में कॉपी करें:
+            <div className="pt-4 border-t border-[#233526]">
+              <span className="text-xs font-semibold text-stone-300 block mb-2">
+                Copy current JSON payload to clipboard:
               </span>
               <button
                 type="button"
                 onClick={() => {
                   navigator.clipboard.writeText(JSON.stringify(siteImages, null, 2));
-                  showNotification('images.json कॉपी हो गया!', 'success');
+                  showNotification('images.json copied to clipboard!', 'success');
                 }}
-                className="px-3.5 py-1.5 bg-stone-800 hover:bg-stone-700 text-[#9ED8A2] rounded-lg text-xs font-semibold"
+                className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-[#9ED8A2] font-semibold text-xs rounded-xl border border-stone-600 transition-all"
               >
-                Copy JSON
+                Copy images.json Content
               </button>
             </div>
           </section>
         )}
 
-        {/* Global Save Button at bottom of page as well */}
-        <div className="pt-6 border-t border-[#233526] flex items-center justify-between">
-          <span className="text-xs text-stone-400">
-            याद रखें: कोई भी पिक्चर बदलने के बाद "परमानेंटली सेव करें" दबाना न भूलें।
+        {/* Global Save Button at bottom */}
+        <div className="p-4 bg-[#141F16] rounded-2xl border border-[#253A28] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span className="text-xs text-stone-300">
+            Remember: Click <strong>"Save Changes Permanently"</strong> after updating any image to lock it into your site.
           </span>
           <button
             type="button"
             onClick={handleSaveAll}
             disabled={isSaving}
-            className="px-6 py-3 bg-[#2E7D46] hover:bg-[#389755] text-white text-sm font-bold rounded-xl shadow-xl transition-all flex items-center gap-2"
+            className="w-full sm:w-auto px-6 py-3 bg-[#2E7D46] hover:bg-[#389755] text-white text-sm font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M5 13l4 4L19 7" />
             </svg>
-            <span>{isSaving ? 'सेव हो रहा है...' : 'परमानेंटली सेव करें (Save Changes)'}</span>
+            <span>{isSaving ? 'Saving...' : 'Save Changes Permanently'}</span>
           </button>
         </div>
 

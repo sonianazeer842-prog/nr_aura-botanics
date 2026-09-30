@@ -171,7 +171,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   onClick={onNavigateAdminImages}
                   className="p-1.5 text-botanic-wood/70 hover:text-botanic-leaf hover:bg-botanic-leafSoft/60 transition-all rounded-lg"
-                  title="इमेज मैनेजर खोलें (Change Website Pictures)"
+                  title="Open Image Manager (Change Website Pictures)"
                   aria-label="Image Manager"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -254,7 +254,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 className="w-full text-left py-2 text-sm font-semibold text-botanic-leaf flex items-center gap-2 border-b border-[#DCE8DB]"
               >
-                <span>🖼️ इमेज व तस्वीरें बदलें (Image Manager)</span>
+                <span>🖼️ Image Manager</span>
               </button>
             )}
             <div className="pt-2 flex flex-col gap-2">

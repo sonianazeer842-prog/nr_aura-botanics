@@ -163,7 +163,7 @@ export async function saveImageRegistry(newImages: SiteImages): Promise<{ succes
       if (res.ok) {
         return {
           success: true,
-          message: 'तस्वीरें सफलतापूर्वक परमानेंटली सेव हो गई हैं! /public/images.json फ़ाइल भी अपडेट हो गई है।'
+          message: 'Images saved permanently! /public/images.json has been updated on disk.'
         };
       }
     } catch {
@@ -172,7 +172,7 @@ export async function saveImageRegistry(newImages: SiteImages): Promise<{ succes
 
     return {
       success: true,
-      message: 'तस्वीरें आपके ब्राउज़र और वेबसाइट पर परमानेंटली सेव हो गई हैं! Vercel पर हमेशा के लिए लाइव करने के लिए images.json डाउनलोड करके GitHub में पुश करें।'
+      message: 'Images saved permanently in your browser and live site! To deploy permanently across Vercel, download images.json and push to GitHub.'
     };
   } catch (error) {
     return { success: false, message: `Save failed: ${String(error)}` };
