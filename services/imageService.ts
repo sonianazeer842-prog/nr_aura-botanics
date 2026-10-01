@@ -54,34 +54,34 @@ export const fallbackDefaultImages: SiteImages = {
   },
   gallery: [
     {
-      id: "lifestyle-1",
-      src: "/lifestyle-1.jpg",
-      alt: "Fine Micro-Mist Spray releasing from NR AURA BOTANICS bottle",
-      label: "Fine Micro-Mist Spray"
-    },
-    {
-      id: "lifestyle-2",
-      src: "/lifestyle-2.jpg",
-      alt: "Pure Hydration and water splash around the hair growth serum",
-      label: "Pure Hydration Splash"
-    },
-    {
-      id: "lifestyle-3",
-      src: "/lifestyle-3.jpg",
-      alt: "Fresh botanical harvest on wooden pedestal with amla and hibiscus",
-      label: "Botanical Harvest & Herbs"
-    },
-    {
-      id: "lifestyle-4",
-      src: "/lifestyle-4.jpg",
-      alt: "Floral garden infusion with pink roses and botanicals",
-      label: "Floral Blossom Infusion"
+      id: "lifestyle-custom-6033",
+      src: "/lifestyle-2-1790837091164.jpg",
+      alt: "New Lifestyle Placement",
+      label: "Lifestyle Slide 2"
     },
     {
       id: "lifestyle-5",
       src: "/lifestyle-5.jpg",
       alt: "Woman holding bottle in bathroom for daily scalp routine",
       label: "In-Hand Daily Scalp Routine"
+    },
+    {
+      id: "lifestyle-custom-4661",
+      src: "/lifestyle-3-1790837152024.jpg",
+      alt: "New Lifestyle Placement",
+      label: "Lifestyle Slide 3"
+    },
+    {
+      id: "lifestyle-custom-9854",
+      src: "/lifestyle-4-1790837174523.jpeg",
+      alt: "New Lifestyle Placement",
+      label: "Lifestyle Slide 4"
+    },
+    {
+      id: "lifestyle-custom-2359",
+      src: "/lifestyle-5-1790837190447.jpg",
+      alt: "New Lifestyle Placement",
+      label: "Lifestyle Slide 5"
     }
   ]
 };
