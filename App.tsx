@@ -34,6 +34,23 @@ import { useSiteImages } from './services/imageService';
 
 export function App() {
   // Store Catalog loaded from products.json / local authoritative service
+    // --- Meta Pixel Code Start ---
+  useEffect(() => {
+    // @ts-ignore
+  !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    // @ts-ignore
+    fbq('init', '1112205381152112');
+    // @ts-ignore
+    fbq('track', 'PageView');
+  }, []);
+  // --- Meta Pixel Code End ---
   const [catalog, setCatalog] = useState<ProductsData>(getAuthoritativeCatalog());
   
   // Central site images loaded from images.json / imageService
