@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import { CartItem, ProductsData, OrderSubmission } from '../types';
 import { calculateOrderSecurity, buildWhatsAppOrderUrl } from '../services/productService';
 import { PAKISTAN_MAJOR_CITIES, WHATSAPP_NUMBER } from '../constants';
+import { trackMetaPurchase } from '../services/metaPixelService';
 
 interface CheckoutProps {
   cart: CartItem[];
@@ -93,6 +94,15 @@ export const Checkout: React.FC<CheckoutProps> = ({
       shippingFee,
       grandTotal
     };
+
+    // Track Meta Pixel Purchase event with catalog match content_ids
+    const purchasedProducts = cart
+      .map(item => {
+        const p = catalog.products.find(prod => prod.id === item.productId);
+        return p ? { product: p, quantity: item.quantity } : null;
+      })
+      .filter((item): item is { product: any; quantity: number } => item !== null);
+    trackMetaPurchase(orderData.orderId, purchasedProducts, grandTotal);
 
     // Store recent order locally for receipt
     try {

@@ -99,7 +99,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={(e) => onNavClick(e, 'shop')}
                 className="hover:text-botanic-leaf transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-botanic-leaf hover:after:w-full after:transition-all"
               >
-                Shop Spray (250ml)
+                Featured
+              </a>
+              <a
+                href="#collection"
+                onClick={(e) => onNavClick(e, 'collection')}
+                className="hover:text-botanic-leaf transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-botanic-leaf hover:after:w-full after:transition-all font-semibold text-botanic-leaf"
+              >
+                Collection
               </a>
               <a
                 href="#story"
@@ -215,7 +222,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={(e) => handleMobileNav(e, 'shop')}
               className="block py-2 text-base font-medium text-botanic-wood hover:text-botanic-leaf border-b border-[#DCE8DB]"
             >
-              Shop Spray Serum (250ml - Rs. 700)
+              Featured Product
+            </a>
+            <a
+              href="#collection"
+              onClick={(e) => handleMobileNav(e, 'collection')}
+              className="block py-2 text-base font-semibold text-botanic-leaf border-b border-[#DCE8DB]"
+            >
+              Botanical Collection (All Products)
             </a>
             <a
               href="#story"

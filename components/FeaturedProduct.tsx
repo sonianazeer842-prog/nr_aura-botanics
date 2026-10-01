@@ -6,40 +6,60 @@
  * Background: Light pastel green with realistic 3D hibiscus flowers showing through.
 */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Product, ProductsData } from '../types';
 import { WHATSAPP_NUMBER } from '../constants';
 import { ProductImageSlider } from './ProductImageSlider';
 import { useSiteImages } from '../services/imageService';
+import { trackMetaViewContent } from '../services/metaPixelService';
 
 interface FeaturedProductProps {
   catalog: ProductsData;
   onAddToCart: (productId: string, quantity: number) => void;
   onBuyNow: (productId: string, quantity: number) => void;
+  selectedProductId?: string;
+  onSelectProduct?: (productId: string) => void;
 }
 
 export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
   catalog,
   onAddToCart,
-  onBuyNow
+  onBuyNow,
+  selectedProductId: propSelectedProductId,
+  onSelectProduct: propOnSelectProduct
 }) => {
   const { images } = useSiteImages();
   const products = catalog.products || [];
-  const [selectedProductId, setSelectedProductId] = useState<string>(
+  const [internalSelectedId, setInternalSelectedId] = useState<string>(
     products[0]?.id || 'botanical-hair-growth-spray-250ml'
   );
+
+  const selectedProductId = propSelectedProductId || internalSelectedId;
+  const setSelectedProductId = (id: string) => {
+    setInternalSelectedId(id);
+    if (propOnSelectProduct) {
+      propOnSelectProduct(id);
+    }
+  };
   const [quantity, setQuantity] = useState<number>(1);
   const [addedAnimation, setAddedAnimation] = useState(false);
 
   const currentProduct: Product = products.find(p => p.id === selectedProductId) || products[0];
 
+  useEffect(() => {
+    if (currentProduct) {
+      trackMetaViewContent(currentProduct);
+    }
+  }, [currentProduct?.id]);
+
   if (!currentProduct) {
     return null;
   }
 
-  const gallery = currentProduct.gallery && currentProduct.gallery.length > 0
+  const isHairSpray = currentProduct.id === 'botanical-hair-growth-spray-250ml' || currentProduct.id.includes('hair-growth-spray');
+  const productImages = (currentProduct.gallery && currentProduct.gallery.length > 0)
     ? currentProduct.gallery
-    : [currentProduct.image];
+    : [currentProduct.image || '/product-original.png'];
 
   const handleAddToCart = () => {
     onAddToCart(currentProduct.id, quantity);
@@ -70,13 +90,21 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
           <span className="text-xs uppercase tracking-widest text-botanic-leaf font-bold block mb-2">
-            The Signature Formulation · 250ml Fine Mist Spray
+            {currentProduct.subtitle || (currentProduct.category ? `${currentProduct.category} · ${currentProduct.size}` : '100% Pure Botanical Formulation')}
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium text-botanic-wood text-balance">
-            Botanical Hair Growth Spray Serum
+            {currentProduct.name}
           </h2>
           <p className="mt-3 text-sm sm:text-base text-botanic-woodMuted">
-            Each 250ml bottle is priced at <strong className="text-botanic-leaf font-bold">Rs. 700/-</strong> with an ultra-fine spray head for effortless, even scalp application.
+            {currentProduct.tagline ? (
+              <>
+                {currentProduct.tagline} for just <strong className="text-botanic-leaf font-bold">Rs. {currentProduct.price.toLocaleString()}/-</strong> with pure botanical plant actives.
+              </>
+            ) : (
+              <>
+                {currentProduct.shortDescription}
+              </>
+            )}
           </p>
         </div>
 
@@ -87,7 +115,13 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
             {/* Left Column: Product Gallery Slider Component */}
             <div className="lg:col-span-6 space-y-4">
               <ProductImageSlider
-                galleryItems={images.gallery}
+                galleryItems={isHairSpray ? images.gallery : undefined}
+                images={isHairSpray ? undefined : productImages}
+                customLabels={currentProduct.id.includes('collagen') ? {
+                  "/collagen-bottle.jpg": "Collagen Booster Serum Bottle (30ml)",
+                  "/collagen-flatlay.jpg": "Pure Coconut, Sesame & Clove Flatlay",
+                  "/collagen-vanity.jpg": "Nightly Skincare Ritual Setting"
+                } : undefined}
                 productName={currentProduct.name}
                 inStock={currentProduct.inStock}
                 discountPercentage={discountPercentage}
@@ -96,12 +130,14 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
               {/* Quality Guarantees Bar */}
               <div className="p-4 rounded-xl bg-white/70 border border-[#D4E7D2] grid grid-cols-3 gap-2 text-center text-xs text-botanic-wood">
                 <div>
-                  <span className="block font-semibold text-botanic-wood">250ml Volume</span>
-                  <span className="text-[11px] text-botanic-woodMuted">Fine-mist spray head</span>
+                  <span className="block font-semibold text-botanic-wood">{currentProduct.size}</span>
+                  <span className="text-[11px] text-botanic-woodMuted">
+                    {currentProduct.id.includes('spray') ? 'Fine-mist spray head' : 'Precision dropper/cap'}
+                  </span>
                 </div>
                 <div className="border-x border-[#D0E0CE]">
-                  <span className="block font-semibold text-botanic-wood">Only Rs. 700/-</span>
-                  <span className="text-[11px] text-botanic-woodMuted">Pure botanical actives</span>
+                  <span className="block font-semibold text-botanic-wood">Only Rs. {currentProduct.price.toLocaleString()}/-</span>
+                  <span className="text-[11px] text-botanic-woodMuted">100% natural actives</span>
                 </div>
                 <div>
                   <span className="block font-semibold text-botanic-wood">Nationwide COD</span>
@@ -118,9 +154,11 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
                 <div className="flex items-center gap-2 text-xs text-botanic-woodMuted mb-1">
                   <span className="font-semibold text-botanic-leaf">{currentProduct.size}</span>
                   <span>·</span>
-                  <span>Spray Pump Nozzle</span>
+                  <span>{currentProduct.id.includes('spray') ? 'Spray Pump Nozzle' : 'Application Cap'}</span>
                   <span>·</span>
-                  <span className="text-botanic-leaf font-medium">Batch No. NR-2026-SP</span>
+                  <span className="text-botanic-leaf font-medium">
+                    {currentProduct.badge || 'Pure Botanical Formulation'}
+                  </span>
                 </div>
                 <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-botanic-wood">
                   {currentProduct.name}
@@ -151,17 +189,17 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
                     Cash on Delivery
                   </span>
                   <span className="block text-[11px] text-botanic-woodMuted mt-1">
-                    250ml Full Bottle
+                    {currentProduct.size}
                   </span>
                 </div>
               </div>
 
-              {/* Pack Selector (Single 250ml, Duo Pack 2x250ml, Trio Course 3x250ml) */}
+              {/* Pack Selector */}
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-botanic-wood block">
-                  Select Quantity / Treatment Course:
+                  Select Botanical Treatment / Product:
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                   {products.map(p => {
                     const isSelected = p.id === currentProduct.id;
                     return (
@@ -177,11 +215,14 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
                         }`}
                       >
                         {p.badge && (
-                          <span className="text-[10px] uppercase font-bold text-botanic-leaf tracking-wider block mb-0.5">
+                          <span className="text-[9px] uppercase font-bold text-botanic-leaf tracking-wider block mb-0.5 line-clamp-1">
                             {p.badge}
                           </span>
                         )}
-                        <span className="block font-semibold text-xs text-botanic-wood truncate">
+                        <span className="block font-semibold text-xs text-botanic-wood line-clamp-1">
+                          {p.name}
+                        </span>
+                        <span className="block text-[11px] text-botanic-woodMuted truncate">
                           {p.size}
                         </span>
                         <span className="block font-serif text-sm font-bold text-botanic-wood tabular-nums mt-1">
@@ -195,25 +236,27 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
 
               {/* Description */}
               <p className="text-sm text-botanic-wood/80 leading-relaxed">
-                {currentProduct.shortDescription}
+                {currentProduct.shortDescription || currentProduct.description}
               </p>
 
               {/* Key Benefits Bullet List */}
-              <div className="space-y-2 border-t border-b border-[#D4E7D2] py-4">
-                <span className="text-xs font-bold uppercase tracking-wider text-botanic-wood block mb-2">
-                  Proven Botanical Benefits:
-                </span>
-                <ul className="space-y-2">
-                  {currentProduct.benefits.map((benefit, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-botanic-wood">
-                      <svg className="w-4 h-4 text-botanic-leaf shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {currentProduct.benefits && Array.isArray(currentProduct.benefits) && currentProduct.benefits.length > 0 && (
+                <div className="space-y-2 border-t border-b border-[#D4E7D2] py-4">
+                  <span className="text-xs font-bold uppercase tracking-wider text-botanic-wood block mb-2">
+                    Proven Botanical Benefits:
+                  </span>
+                  <ul className="space-y-2">
+                    {currentProduct.benefits.map((benefit, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-botanic-wood">
+                        <svg className="w-4 h-4 text-botanic-leaf shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span>{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Quantity Selector & Action Buttons */}
               <div className="space-y-3 pt-2">

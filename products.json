@@ -25,6 +25,7 @@
       "tagline": "Revitalizes, Strengthens & Stimulates",
       "subtitle": "Rosemary, Hibiscus, Amla & Fenugreek Infusion · Floral Printed Label · Fine Mist Spray Cap",
       "size": "250ml / 8.5 fl oz",
+      "catalogContentId": "dr6xfy8svc",
       "_comment_price": "// EDIT PRICE HERE (Single 250ml Bottle Price in PKR)",
       "price": 700,
       "originalPrice": 950,
@@ -98,6 +99,7 @@
       "tagline": "60-Day Intensive Revitalization Course",
       "subtitle": "2x 250ml Transparent Spray Bottles · Save Rs. 100",
       "size": "2 x 250ml (500ml Total)",
+      "catalogContentId": "dr6xfy8svc",
       "_comment_price": "// EDIT PRICE HERE (Duo Pack Price in PKR)",
       "price": 1300,
       "originalPrice": 1600,
@@ -127,6 +129,7 @@
       "tagline": "3-Month Complete Transformation Course",
       "subtitle": "3x 250ml Transparent Spray Bottles · Maximum Value & Free Delivery",
       "size": "3 x 250ml (750ml Total)",
+      "catalogContentId": "dr6xfy8svc",
       "_comment_price": "// EDIT PRICE HERE (Trio Pack Price in PKR)",
       "price": 1950,
       "originalPrice": 2500,
@@ -148,6 +151,82 @@
         "Complimentary FREE Cash on Delivery across Pakistan",
         "Direct Rs. 550 savings off standard retail",
         "Personalized hair care consultation via WhatsApp"
+      ]
+    },
+    {
+      "id": "collagen-boost-organic-serum-30ml",
+      "name": "Collagen Boost Organic Serum",
+      "tagline": "Restores Collagen, Firms & Illuminates",
+      "subtitle": "Natural Collagen, Aloe Vera, Rosehip Oil, Vitamin C & Hyaluronic Acid · Safe for Sensitive Skin",
+      "size": "30ml / 1 fl oz",
+      "catalogContentId": "dr6xfy8svc",
+      "_comment_price": "// EDIT PRICE HERE (Collagen Boost Serum 30ml Price in PKR)",
+      "price": 850,
+      "originalPrice": 1200,
+      "inStock": true,
+      "stockCount": 50,
+      "isMainProduct": false,
+      "badge": "New Launch · 100% Organic",
+      "image": "/collagen-bottle.jpg",
+      "gallery": [
+        "/collagen-bottle.jpg",
+        "/collagen-flatlay.jpg",
+        "/collagen-vanity.jpg"
+      ],
+      "shortDescription": "Made with 100% Pure & Natural Ingredients. Safe for Sensitive Skin. This chemical-free serum is crafted to naturally restore your skin's collagen, giving you firmer, younger and glowing skin without any side effects.",
+      "benefits": [
+        "Naturally Reduces Wrinkles & Fine Lines",
+        "Firms & Lifts Saggy Skin",
+        "Deeply Hydrates and Brings Natural Glow",
+        "Safe for Sensitive Skin, No Side Effects",
+        "Suitable For: All Skin Types, Especially Sensitive Skin",
+        "Age 25+ | For Men & Women | 100% Organic & Cruelty-Free",
+        "Infused with Coconut, Sesame & Clove botanical formula",
+        "Non-comedogenic, fast-absorbing elixir with pure active botanicals"
+      ],
+      "ingredients": [
+        {
+          "name": "Natural Plant Collagen",
+          "role": "Elasticity & Firmness Restoration",
+          "description": "Replenishes skin structure, boosts cellular resilience, and visibly smoothes fine lines and sagging contours."
+        },
+        {
+          "name": "Organic Aloe Vera Extract",
+          "role": "Deep Soothing & Cellular Hydration",
+          "description": "Delivers intensive cooling hydration, accelerates skin healing, and calms redness and sensitive skin irritation."
+        },
+        {
+          "name": "Cold-Pressed Rosehip Oil",
+          "role": "Vitamin A & Skin Barrier Repair",
+          "description": "Rich in essential fatty acids and natural retinoids to fade hyperpigmentation, even skin tone, and restore youthful elasticity."
+        },
+        {
+          "name": "Stabilized Vitamin C",
+          "role": "Radiance & Antioxidant Protection",
+          "description": "Potent brightening antioxidant that combats environmental free radicals, stimulates collagen synthesis, and imparts a luminous natural glow."
+        },
+        {
+          "name": "Multi-Molecular Hyaluronic Acid",
+          "role": "Intense Moisture Retention",
+          "description": "Penetrates deeply to attract and lock in up to 1000x its weight in water, plumping skin and smoothing texture."
+        }
+      ],
+      "howToUse": [
+        {
+          "step": "01",
+          "title": "Cleanse Skin",
+          "instruction": "Wash face and neck with lukewarm water and a gentle cleanser, then pat dry with a soft clean towel."
+        },
+        {
+          "step": "02",
+          "title": "Dispense 2-3 Drops",
+          "instruction": "Using the glass dropper, dispense 2–3 drops onto clean fingertips or directly onto cheeks and forehead."
+        },
+        {
+          "step": "03",
+          "title": "Nightly Ritual",
+          "instruction": "Gently smooth and press upward into face and neck every night before sleep. Allow complete overnight absorption."
+        }
       ]
     }
   ]

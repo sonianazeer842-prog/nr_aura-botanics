@@ -35,14 +35,43 @@
       "src": "/product-original.png",
       "alt": "Trio Pack 3x250ml Spray Bottles",
       "title": "Trio Transformation Course (3x250ml)"
+    },
+    "collagen": {
+      "src": "/collagen-bottle.jpg",
+      "alt": "NR AURA BOTANICS Collagen Boost Organic Serum (30ml)",
+      "title": "Collagen Boost Organic Serum (30ml)"
     }
   },
   "gallery": [
+    {
+      "id": "lifestyle-custom-6033",
+      "src": "/lifestyle-2-1790837091164.jpg",
+      "alt": "New Lifestyle Placement",
+      "label": "Lifestyle Slide 2"
+    },
     {
       "id": "lifestyle-5",
       "src": "/lifestyle-5.jpg",
       "alt": "Woman holding bottle in bathroom for daily scalp routine",
       "label": "In-Hand Daily Scalp Routine"
+    },
+    {
+      "id": "lifestyle-custom-4661",
+      "src": "/lifestyle-3-1790837152024.jpg",
+      "alt": "New Lifestyle Placement",
+      "label": "Lifestyle Slide 3"
+    },
+    {
+      "id": "lifestyle-custom-9854",
+      "src": "/lifestyle-4-1790837174523.jpeg",
+      "alt": "New Lifestyle Placement",
+      "label": "Lifestyle Slide 4"
+    },
+    {
+      "id": "lifestyle-custom-2359",
+      "src": "/lifestyle-5-1790837190447.jpg",
+      "alt": "New Lifestyle Placement",
+      "label": "Lifestyle Slide 5"
     }
   ]
 }

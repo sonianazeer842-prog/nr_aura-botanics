@@ -23,35 +23,54 @@ import CartDrawer from './components/CartDrawer';
 import Checkout from './components/Checkout';
 import AdminPortal from './components/AdminPortal';
 import AdminImages from './components/AdminImages';
+import { ProductGrid } from './components/ProductGrid';
 
 import { CartItem, ProductsData, ViewType } from './types';
 import {
   getAuthoritativeCatalog,
   fetchAuthoritativeCatalog,
-  calculateOrderSecurity
+  calculateOrderSecurity,
+  PRODUCTS_EVENT_NAME
 } from './services/productService';
 import { useSiteImages } from './services/imageService';
+import { trackMetaAddToCart, trackMetaInitiateCheckout } from './services/metaPixelService';
 
 export function App() {
   // Store Catalog loaded from products.json / local authoritative service
     // --- Meta Pixel Code Start ---
   useEffect(() => {
-    // @ts-ignore
-  !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    // @ts-ignore
-    fbq('init', '1112205381152112');
-    // @ts-ignore
-    fbq('track', 'PageView');
+    const win = window as any;
+    if (!win.fbq) {
+      const n: any = function() {
+        if (n.callMethod) {
+          n.callMethod.apply(n, arguments);
+        } else {
+          n.queue.push(arguments);
+        }
+      };
+      if (!win._fbq) win._fbq = n;
+      n.push = n;
+      n.loaded = true;
+      n.version = '2.0';
+      n.queue = [];
+      const t = document.createElement('script');
+      t.async = true;
+      t.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      const s = document.getElementsByTagName('script')[0];
+      s?.parentNode?.insertBefore(t, s);
+      win.fbq = n;
+    }
+    if (typeof win.fbq === 'function') {
+      win.fbq('init', '1112205381152112');
+      win.fbq('track', 'PageView');
+    }
   }, []);
   // --- Meta Pixel Code End ---
   const [catalog, setCatalog] = useState<ProductsData>(getAuthoritativeCatalog());
+  const [selectedProductId, setSelectedProductId] = useState<string>(() => {
+    const initial = getAuthoritativeCatalog();
+    return initial.products[0]?.id || 'botanical-hair-growth-spray-250ml';
+  });
   
   // Central site images loaded from images.json / imageService
   const { images: siteImages, setImages: setSiteImages } = useSiteImages();
@@ -70,6 +89,18 @@ export function App() {
   });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Live listen for any product updates from admin panel across the app
+  useEffect(() => {
+    const handleProductsUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent<ProductsData>;
+      if (customEvent.detail && Array.isArray(customEvent.detail.products)) {
+        setCatalog(customEvent.detail);
+      }
+    };
+    window.addEventListener(PRODUCTS_EVENT_NAME, handleProductsUpdate);
+    return () => window.removeEventListener(PRODUCTS_EVENT_NAME, handleProductsUpdate);
+  }, []);
 
   // Sync catalog from /products.json on initial mount & handle routing
   useEffect(() => {
@@ -146,6 +177,10 @@ export function App() {
    */
   const handleAddToCart = (productId: string, quantity: number) => {
     const safeQty = Math.max(1, Math.min(99, Math.floor(quantity)));
+    const product = catalog.products.find(p => p.id === productId);
+    if (product) {
+      trackMetaAddToCart(product, safeQty);
+    }
     setCart(prev => {
       const existingIdx = prev.findIndex(item => item.productId === productId);
       if (existingIdx >= 0) {
@@ -167,6 +202,10 @@ export function App() {
    */
   const handleBuyNow = (productId: string, quantity: number) => {
     handleAddToCart(productId, quantity);
+    const product = catalog.products.find(p => p.id === productId);
+    if (product) {
+      trackMetaInitiateCheckout([{ product, quantity: Math.max(1, Math.floor(quantity)) }], (Number(product.price) || 0) * quantity);
+    }
     setIsCartOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setView('checkout');
@@ -233,8 +272,19 @@ export function App() {
             <Hero onShopClick={() => scrollToSection('shop')} />
             <FeaturedProduct
               catalog={catalog}
+              selectedProductId={selectedProductId}
+              onSelectProduct={(id) => setSelectedProductId(id)}
               onAddToCart={handleAddToCart}
               onBuyNow={handleBuyNow}
+            />
+            {/* Shopify-Style All Products Collection Grid */}
+            <ProductGrid
+              catalog={catalog}
+              onAddToCart={handleAddToCart}
+              onSelectProduct={(id) => {
+                setSelectedProductId(id);
+                scrollToSection('shop');
+              }}
             />
             <IngredientsSection />
             <HowToUseSection />
@@ -262,6 +312,11 @@ export function App() {
           <AdminPortal
             catalog={catalog}
             onUpdateCatalog={(newCatalog) => setCatalog(newCatalog)}
+            onSelectProductForPreview={(productId) => {
+              setSelectedProductId(productId);
+              setView('store');
+              setTimeout(() => scrollToSection('shop'), 100);
+            }}
             onExitAdmin={() => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
               setView('store');
@@ -334,6 +389,14 @@ export function App() {
         onRemoveItem={handleRemoveItem}
         onProceedToCheckout={() => {
           setIsCartOpen(false);
+          const cartProducts = cart
+            .map(item => {
+              const p = catalog.products.find(prod => prod.id === item.productId);
+              return p ? { product: p, quantity: item.quantity } : null;
+            })
+            .filter((item): item is { product: any; quantity: number } => item !== null);
+          const security = calculateOrderSecurity(cart, catalog);
+          trackMetaInitiateCheckout(cartProducts, security.grandTotal);
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setView('checkout');
         }}

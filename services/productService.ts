@@ -11,6 +11,7 @@
  * WhatsApp Contact: 0334-3562833
 */
 
+import { useState, useEffect } from 'react';
 import { ProductsData, Product, CartItem, OrderSubmission } from '../types';
 
 // Default initial database fallback matching /products.json
@@ -37,6 +38,7 @@ export const INITIAL_PRODUCTS_DATA: ProductsData = {
       tagline: "Revitalizes, Strengthens & Stimulates",
       subtitle: "Rosemary, Hibiscus, Amla & Fenugreek Infusion · Floral Printed Label · Fine Mist Spray Cap",
       size: "250ml / 8.5 fl oz",
+      catalogContentId: "dr6xfy8svc",
       price: 700, // <-- // EDIT PRICE HERE (Single 250ml Bottle Price in PKR)
       originalPrice: 950,
       inStock: true,
@@ -110,6 +112,7 @@ export const INITIAL_PRODUCTS_DATA: ProductsData = {
       tagline: "60-Day Intensive Revitalization Course",
       subtitle: "2x 250ml Spray Bottles · Save Rs. 100",
       size: "2 x 250ml (500ml Total)",
+      catalogContentId: "dr6xfy8svc",
       price: 1300, // <-- // EDIT PRICE HERE (Duo Pack Price in PKR)
       originalPrice: 1600,
       inStock: true,
@@ -138,6 +141,7 @@ export const INITIAL_PRODUCTS_DATA: ProductsData = {
       tagline: "3-Month Complete Transformation Course",
       subtitle: "3x 250ml Transparent Spray Bottles · Maximum Value & Free Delivery",
       size: "3 x 250ml (750ml Total)",
+      catalogContentId: "dr6xfy8svc",
       price: 1950, // <-- // EDIT PRICE HERE (Trio Pack Price in PKR)
       originalPrice: 2500,
       inStock: true,
@@ -146,11 +150,11 @@ export const INITIAL_PRODUCTS_DATA: ProductsData = {
       badge: "Best Value · Free Delivery",
       image: "/product-original.png",
       gallery: [
-        "/lifestyle-1.jpg",
-        "/lifestyle-2.jpg",
-        "/lifestyle-3.jpg",
-        "/lifestyle-4.jpg",
-        "/lifestyle-5.jpg"
+        "/lifestyle-2-1790837091164.jpg",
+        "/lifestyle-5.jpg",
+        "/lifestyle-3-1790837152024.jpg",
+        "/lifestyle-4-1790837174523.jpeg",
+        "/lifestyle-5-1790837190447.jpg"
       ],
       shortDescription: "The definitive 90-day biological restoration cycle with three 250ml spray bottles filled with golden-amber botanical elixir with botanical floral labels. Perfect for pronounced thinning, post-partum shedding, or family sharing. Includes free nationwide delivery.",
       benefits: [
@@ -159,11 +163,87 @@ export const INITIAL_PRODUCTS_DATA: ProductsData = {
         "Direct Rs. 550 savings off standard retail",
         "Personalized hair care consultation via WhatsApp"
       ]
+    },
+    {
+      id: "collagen-boost-organic-serum-30ml",
+      name: "Collagen Boost Organic Serum",
+      tagline: "Restores Collagen, Firms & Illuminates",
+      subtitle: "Natural Collagen, Aloe Vera, Rosehip Oil, Vitamin C & Hyaluronic Acid · Safe for Sensitive Skin",
+      size: "30ml / 1 fl oz",
+      catalogContentId: "dr6xfy8svc",
+      price: 850,
+      originalPrice: 1200,
+      inStock: true,
+      stockCount: 50,
+      isMainProduct: false,
+      badge: "New Launch · 100% Organic",
+      image: "/collagen-bottle.jpg",
+      gallery: [
+        "/collagen-bottle.jpg",
+        "/collagen-flatlay.jpg",
+        "/collagen-vanity.jpg"
+      ],
+      shortDescription: "Made with 100% Pure & Natural Ingredients. Safe for Sensitive Skin. This chemical-free serum is crafted to naturally restore your skin's collagen, giving you firmer, younger and glowing skin without any side effects.",
+      benefits: [
+        "Naturally Reduces Wrinkles & Fine Lines",
+        "Firms & Lifts Saggy Skin",
+        "Deeply Hydrates and Brings Natural Glow",
+        "Safe for Sensitive Skin, No Side Effects",
+        "Suitable For: All Skin Types, Especially Sensitive Skin",
+        "Age 25+ | For Men & Women | 100% Organic & Cruelty-Free",
+        "Infused with Coconut, Sesame & Clove botanical formula",
+        "Non-comedogenic, fast-absorbing elixir with pure active botanicals"
+      ],
+      ingredients: [
+        {
+          name: "Natural Plant Collagen",
+          role: "Elasticity & Firmness Restoration",
+          description: "Replenishes skin structure, boosts cellular resilience, and visibly smoothes fine lines and sagging contours."
+        },
+        {
+          name: "Organic Aloe Vera Extract",
+          role: "Deep Soothing & Cellular Hydration",
+          description: "Delivers intensive cooling hydration, accelerates skin healing, and calms redness and sensitive skin irritation."
+        },
+        {
+          name: "Cold-Pressed Rosehip Oil",
+          role: "Vitamin A & Skin Barrier Repair",
+          description: "Rich in essential fatty acids and natural retinoids to fade hyperpigmentation, even skin tone, and restore youthful elasticity."
+        },
+        {
+          name: "Stabilized Vitamin C",
+          role: "Radiance & Antioxidant Protection",
+          description: "Potent brightening antioxidant that combats environmental free radicals, stimulates collagen synthesis, and imparts a luminous natural glow."
+        },
+        {
+          name: "Multi-Molecular Hyaluronic Acid",
+          role: "Intense Moisture Retention",
+          description: "Penetrates deeply to attract and lock in up to 1000x its weight in water, plumping skin and smoothing texture."
+        }
+      ],
+      howToUse: [
+        {
+          step: "01",
+          title: "Cleanse Skin",
+          instruction: "Wash face and neck with lukewarm water and a gentle cleanser, then pat dry with a soft clean towel."
+        },
+        {
+          step: "02",
+          title: "Dispense 2-3 Drops",
+          instruction: "Using the glass dropper, dispense 2–3 drops onto clean fingertips or directly onto cheeks and forehead."
+        },
+        {
+          step: "03",
+          title: "Nightly Ritual",
+          instruction: "Gently smooth and press upward into face and neck every night before sleep. Allow complete overnight absorption."
+        }
+      ]
     }
   ]
 };
 
-const STORAGE_KEY = 'nr_aura_botanics_products_v12';
+export const PRODUCTS_STORAGE_KEY = 'nr_aura_botanics_products_v14';
+export const PRODUCTS_EVENT_NAME = 'nr_aura_products_updated';
 const ADMIN_AUTH_KEY = 'nr_aura_admin_session';
 
 /**
@@ -171,7 +251,7 @@ const ADMIN_AUTH_KEY = 'nr_aura_admin_session';
  */
 export function getAuthoritativeCatalog(): ProductsData {
   try {
-    const local = localStorage.getItem(STORAGE_KEY);
+    const local = localStorage.getItem(PRODUCTS_STORAGE_KEY);
     if (local) {
       const parsed = JSON.parse(local);
       if (parsed && Array.isArray(parsed.products) && parsed.products.length > 0) {
@@ -185,19 +265,42 @@ export function getAuthoritativeCatalog(): ProductsData {
 }
 
 /**
+ * React hook to listen for real-time catalog changes
+ */
+export function useProductCatalog(initialData?: ProductsData) {
+  const [catalog, setCatalog] = useState<ProductsData>(() => initialData || getAuthoritativeCatalog());
+
+  useEffect(() => {
+    // Initial fetch from /products.json
+    fetchAuthoritativeCatalog().then(data => {
+      setCatalog(data);
+    });
+
+    const handleUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent<ProductsData>;
+      if (customEvent.detail) {
+        setCatalog(customEvent.detail);
+      }
+    };
+
+    window.addEventListener(PRODUCTS_EVENT_NAME, handleUpdate);
+    return () => window.removeEventListener(PRODUCTS_EVENT_NAME, handleUpdate);
+  }, []);
+
+  return { catalog, setCatalog };
+}
+
+/**
  * Asynchronously checks /products.json from the network if available
  */
 export async function fetchAuthoritativeCatalog(): Promise<ProductsData> {
   try {
-    const cached = localStorage.getItem(STORAGE_KEY);
-    if (cached) {
-      return JSON.parse(cached);
-    }
-
-    const response = await fetch('/products.json', { cache: 'no-store' });
+    const response = await fetch(`/products.json?t=${Date.now()}`, { cache: 'no-store' });
     if (response.ok) {
       const data = await response.json();
-      if (data && Array.isArray(data.products)) {
+      if (data && Array.isArray(data.products) && data.products.length > 0) {
+        localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(data, null, 2));
+        window.dispatchEvent(new CustomEvent(PRODUCTS_EVENT_NAME, { detail: data }));
         return data;
       }
     }
@@ -209,12 +312,79 @@ export async function fetchAuthoritativeCatalog(): Promise<ProductsData> {
 
 /**
  * Save updated product database (Admin only)
+ * 1. Saves to localStorage
+ * 2. Broadcasts custom event so all live components immediately update
+ * 3. Sends POST /api/save-products to write to products.json permanently on disk
  */
-export function saveAuthoritativeCatalog(data: ProductsData): void {
+export async function saveAuthoritativeCatalog(data: ProductsData): Promise<{ success: boolean; message: string }> {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data, null, 2));
+    // 1. Save to local storage
+    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(data, null, 2));
+
+    // 2. Broadcast event to live site
+    window.dispatchEvent(new CustomEvent(PRODUCTS_EVENT_NAME, { detail: data }));
+
+    // 3. Persist to disk via server API
+    try {
+      const res = await fetch('/api/save-products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        return {
+          success: true,
+          message: '✓ Saved permanently to products.json and live site updated!'
+        };
+      }
+    } catch {
+      // In static deployment (e.g. Vercel)
+    }
+
+    return {
+      success: true,
+      message: '✓ Saved to browser storage and live site updated!'
+    };
   } catch (err) {
-    console.error("Failed to persist catalog in storage", err);
+    console.error("Failed to persist catalog", err);
+    return { success: false, message: `Save failed: ${String(err)}` };
+  }
+}
+
+/**
+ * Upload an image file for a product (converts to URL or base64)
+ */
+export async function uploadProductImage(file: File, customFilename?: string): Promise<{ success: boolean; url: string; message: string }> {
+  try {
+    const ext = file.name.split('.').pop() || 'jpg';
+    const filename = customFilename || `product-${Date.now()}.${ext}`;
+
+    // Read base64
+    const base64Data = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    // Try dev server API
+    try {
+      const res = await fetch('/api/upload-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename, data: base64Data })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        return { success: true, url: json.path || `/${filename}`, message: 'Uploaded successfully!' };
+      }
+    } catch {
+      // Fallback to base64 data URL
+    }
+
+    return { success: true, url: base64Data, message: 'Image loaded successfully!' };
+  } catch (err) {
+    return { success: false, url: '', message: `Upload failed: ${String(err)}` };
   }
 }
 
@@ -223,7 +393,8 @@ export function saveAuthoritativeCatalog(data: ProductsData): void {
  */
 export function resetAuthoritativeCatalog(): void {
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(PRODUCTS_STORAGE_KEY);
+    window.dispatchEvent(new CustomEvent(PRODUCTS_EVENT_NAME, { detail: INITIAL_PRODUCTS_DATA }));
   } catch (err) {
     console.error("Failed to reset catalog", err);
   }

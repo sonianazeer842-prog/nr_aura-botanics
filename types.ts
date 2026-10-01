@@ -24,12 +24,16 @@ export interface Product {
   price: number; // In PKR
   originalPrice: number;
   inStock: boolean;
+  stockStatus?: 'In Stock' | 'Out of Stock' | 'Available' | 'Sold Out';
   stockCount: number;
+  category?: string;
+  catalogContentId?: string; // Meta Pixel Catalog Content ID (e.g. dr6xfy8svc)
   isMainProduct?: boolean;
   badge?: string;
   image: string;
   gallery: string[];
   shortDescription: string;
+  description?: string; // Long detailed description
   benefits: string[];
   ingredients?: Ingredient[];
   howToUse?: HowToUseStep[];
