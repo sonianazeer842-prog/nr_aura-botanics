@@ -474,6 +474,7 @@ export function buildWhatsAppOrderUrl(order: OrderSubmission, storeInfo: Product
     `📍 *Delivery Address:* ${order.address}\n` +
     `🏙️ *City:* ${order.city}\n` +
     (order.notes ? `📝 *Special Instructions:* ${order.notes}\n` : '') +
+    (order.affiliateId ? `🤝 *Referral / Affiliate ID:* ${order.affiliateId}\n` : '') +
     `\n*Order Summary:*\n` +
     `${itemsText}\n\n` +
     `📦 *Delivery:* ${deliveryNote}\n` +

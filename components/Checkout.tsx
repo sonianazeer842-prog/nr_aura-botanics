@@ -7,11 +7,13 @@
  * in products.json. Any frontend tampering with prices is blocked.
 */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CartItem, ProductsData, OrderSubmission } from '../types';
 import { calculateOrderSecurity, buildWhatsAppOrderUrl } from '../services/productService';
 import { PAKISTAN_MAJOR_CITIES, WHATSAPP_NUMBER } from '../constants';
 import { trackMetaPurchase } from '../services/metaPixelService';
+import { getStoredAffiliateId } from '../services/referralService';
+import { trackGoAffProConversion } from '../services/goaffproService';
 
 interface CheckoutProps {
   cart: CartItem[];
@@ -30,6 +32,8 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const { verifiedItems, subtotal, shippingFee, grandTotal, currencySymbol } =
     calculateOrderSecurity(cart, catalog);
 
+  const activeAffiliateId = getStoredAffiliateId();
+
   // Form states
   const [customerName, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
@@ -43,6 +47,26 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmedOrder, setConfirmedOrder] = useState<OrderSubmission | null>(null);
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+
+  // GoAffPro Conversion Tracking for Order Success / Thank You screen
+  useEffect(() => {
+    if (confirmedOrder) {
+      const order_id = confirmedOrder.orderId || ("AURA-" + Date.now());
+      const order_total = confirmedOrder.grandTotal;
+
+      const win = window as any;
+      win.goaffpro_order = {
+        order_id: order_id,
+        total: order_total
+      };
+
+      if (win.goaffproTrackConversion) {
+        win.goaffproTrackConversion(win.goaffpro_order);
+      }
+
+      trackGoAffProConversion(confirmedOrder);
+    }
+  }, [confirmedOrder?.orderId]);
 
   const validate = (): boolean => {
     const errors: { [key: string]: string } = {};
@@ -73,6 +97,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
 
     const finalCity = city === 'Other City' ? customCity.trim() : city;
     const orderId = `AURA-${Math.floor(100000 + Math.random() * 900000)}`;
+    const affiliateId = getStoredAffiliateId();
 
     const orderData: OrderSubmission = {
       orderId,
@@ -82,6 +107,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
       address: address.trim(),
       city: finalCity,
       notes: notes.trim(),
+      affiliateId: affiliateId || undefined,
       paymentMethod,
       items: verifiedItems.map(item => ({
         productId: item.productId,
@@ -103,6 +129,9 @@ export const Checkout: React.FC<CheckoutProps> = ({
       })
       .filter((item): item is { product: any; quantity: number } => item !== null);
     trackMetaPurchase(orderData.orderId, purchasedProducts, grandTotal);
+
+    // Track GoAffPro affiliate sale conversion (Shop ID: eajljgybld)
+    trackGoAffProConversion(orderData);
 
     // Store recent order locally for receipt
     try {
@@ -129,6 +158,22 @@ export const Checkout: React.FC<CheckoutProps> = ({
   // Receipt Modal upon successful order
   if (confirmedOrder) {
     const waUrl = buildWhatsAppOrderUrl(confirmedOrder, catalog.storeInfo);
+
+    // Immediate assignment and trigger for GoAffPro tracking on Thank You screen
+    if (typeof window !== 'undefined') {
+      const win = window as any;
+      win.goaffpro_order = {
+        order_id: confirmedOrder.orderId || ("AURA-" + Date.now()),
+        total: confirmedOrder.grandTotal
+      };
+      if (typeof win.goaffproTrackConversion === 'function') {
+        try {
+          win.goaffproTrackConversion(win.goaffpro_order);
+        } catch {
+          // safe
+        }
+      }
+    }
 
     return (
       <div className="min-h-screen bg-botanic-cream py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
@@ -176,6 +221,14 @@ export const Checkout: React.FC<CheckoutProps> = ({
                 {catalog.storeInfo.deliveryEstimate || '2-4 Working Days'}
               </span>
             </div>
+            {confirmedOrder.affiliateId && (
+              <div className="flex justify-between border-b border-[#E0D7CB] pb-2">
+                <span className="text-botanic-woodMuted">Referral / Affiliate Partner:</span>
+                <span className="font-semibold text-botanic-leaf font-mono">
+                  {confirmedOrder.affiliateId}
+                </span>
+              </div>
+            )}
             <div className="flex justify-between pt-1 font-serif text-base font-bold text-botanic-wood">
               <span>Total Payable at Doorstep:</span>
               <span className="tabular-nums">Rs. {confirmedOrder.grandTotal.toLocaleString()}</span>
@@ -505,6 +558,21 @@ export const Checkout: React.FC<CheckoutProps> = ({
                 </div>
               ))}
             </div>
+
+            {/* Active Affiliate / Referral Badge */}
+            {activeAffiliateId && (
+              <div className="pt-3 border-t border-[#E8E1D5]">
+                <div className="p-2.5 bg-emerald-50/80 rounded-xl border border-emerald-200 text-xs text-emerald-900 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span className="text-[11px] font-semibold">Referral Partner Applied:</span>
+                  </div>
+                  <span className="font-mono font-bold text-emerald-800 bg-white/90 px-2 py-0.5 rounded text-[11px] border border-emerald-300">
+                    {activeAffiliateId}
+                  </span>
+                </div>
+              </div>
+            )}
 
             {/* Pricing details */}
             <div className="pt-4 border-t border-[#E8E1D5] space-y-2 text-xs text-botanic-wood">

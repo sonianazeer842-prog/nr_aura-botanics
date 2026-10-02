@@ -13,6 +13,9 @@ import { ProductImageSlider } from './ProductImageSlider';
 import { useSiteImages } from '../services/imageService';
 import { trackMetaViewContent } from '../services/metaPixelService';
 
+// GoAffPro Affiliate Portal & Destination Link (Shop ID: eajljgybld)
+export const AFFILIATE_PARTNER_LINK = "https://eajljgybld.goaffpro.com/";
+
 interface FeaturedProductProps {
   catalog: ProductsData;
   onAddToCart: (productId: string, quantity: number) => void;
@@ -69,6 +72,39 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
 
   const handleBuyNow = () => {
     onBuyNow(currentProduct.id, quantity);
+  };
+
+  const handleAffiliateClick = () => {
+    console.log('🌿 [NR AURA BOTANICS - Affiliate Tracking] "Affiliate Link - Buy Here" clicked:', {
+      businessName: 'NR Aura Botanics',
+      productName: currentProduct.name,
+      productId: currentProduct.id,
+      productPrice: currentProduct.price,
+      currency: catalog.currencySymbol || 'Rs.',
+      affiliateDestinationUrl: AFFILIATE_PARTNER_LINK,
+      timestamp: new Date().toISOString(),
+      referrer: typeof document !== 'undefined' ? (document.referrer || 'Direct') : 'Direct',
+      pageUrl: typeof window !== 'undefined' ? window.location.href : ''
+    });
+
+    try {
+      const win = window as any;
+      if (typeof win.fbq === 'function') {
+        win.fbq('trackCustom', 'AffiliateLinkClick', {
+          product_name: currentProduct.name,
+          product_id: currentProduct.id,
+          affiliate_url: AFFILIATE_PARTNER_LINK,
+          value: currentProduct.price,
+          currency: 'PKR'
+        });
+      }
+    } catch {
+      // safe fallback
+    }
+
+    console.log('🌿 [GoAffPro - Shop ID: eajljgybld] Official Partner Portal link accessed:', {
+      portal: AFFILIATE_PARTNER_LINK
+    });
   };
 
   const handleQuantityChange = (delta: number) => {
@@ -319,6 +355,39 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                   </button>
+                </div>
+
+                {/* Affiliate Link Section: Below main Buy Now button */}
+                <div className="pt-2 space-y-1.5">
+                  <p className="text-center text-xs font-medium text-botanic-wood/80 flex items-center justify-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span>
+                    <span>Support us by buying from our official partner link</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span>
+                  </p>
+
+                  <a
+                    href={AFFILIATE_PARTNER_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={handleAffiliateClick}
+                    className="w-full py-3.5 px-5 rounded-xl font-bold text-sm text-[#D4AF37] bg-[#1A4D2E] hover:bg-[#143d24] border-2 border-[#D4AF37] shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2.5 hover:scale-[1.01] hover:-translate-y-0.5 group relative overflow-hidden"
+                    title="Affiliate Link - Buy Here"
+                  >
+                    {/* Subtle Gold Shimmer Effect */}
+                    <span className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-[#D4AF37]/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-[350%] transition-transform duration-1000 ease-out pointer-events-none" />
+
+                    {/* Gold Star Icon */}
+                    <svg className="w-4 h-4 text-[#D4AF37] shrink-0 group-hover:rotate-12 transition-transform duration-300 fill-current" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+
+                    <span className="tracking-wide">Affiliate Link - Buy Here</span>
+
+                    {/* External Link Arrow */}
+                    <svg className="w-4 h-4 text-[#D4AF37] shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
                 </div>
 
                 {/* Dedicated WhatsApp Box Button (Opens WhatsApp directly without showing raw phone digits) */}

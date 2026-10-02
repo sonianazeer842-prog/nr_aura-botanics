@@ -34,6 +34,7 @@ import {
 } from './services/productService';
 import { useSiteImages } from './services/imageService';
 import { trackMetaAddToCart, trackMetaInitiateCheckout } from './services/metaPixelService';
+import { captureReferralFromUrl } from './services/referralService';
 
 export function App() {
   // Store Catalog loaded from products.json / local authoritative service
@@ -102,8 +103,11 @@ export function App() {
     return () => window.removeEventListener(PRODUCTS_EVENT_NAME, handleProductsUpdate);
   }, []);
 
-  // Sync catalog from /products.json on initial mount & handle routing
+  // Sync catalog from /products.json on initial mount, capture referral parameters & handle routing
   useEffect(() => {
+    // 30-day URL referral attribution tracking (?ref=..., ?aff=..., ?via=...)
+    captureReferralFromUrl();
+
     fetchAuthoritativeCatalog().then(data => {
       setCatalog(data);
     });

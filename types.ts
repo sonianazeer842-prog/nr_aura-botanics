@@ -94,6 +94,7 @@ export interface OrderSubmission {
   address: string;
   city: string;
   notes?: string;
+  affiliateId?: string; // Captured from ?ref=, ?aff=, or ?via= with 30-day window
   paymentMethod: 'COD' | 'WHATSAPP';
   items: {
     productId: string;
