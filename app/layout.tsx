@@ -17,7 +17,7 @@ export default function RootLayout({
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {/* GoAffPro Affiliate Tracking Loader (Shop ID: eajjgyb0ld) */}
-        <script src="https://api.goaffpro.com/loader.js?shop=eajjgyb0ld"></script>
+        <script src="https://api.goaffpro.com/loader.js?shop=eajjgyb0ld" async></script>
       </head>
       <body>{children}</body>
     </html>
