@@ -11,8 +11,8 @@
 
 import { OrderSubmission } from '../types';
 
-export const GOAFFPRO_SHOP_ID = 'eajljgybld';
-export const GOAFFPRO_PORTAL_URL = 'https://eajljgybld.goaffpro.com/';
+export const GOAFFPRO_SHOP_ID = 'eajjgyb0ld';
+export const GOAFFPRO_PORTAL_URL = 'https://eajjgyb0ld.goaffpro.com/';
 
 declare global {
   interface Window {
