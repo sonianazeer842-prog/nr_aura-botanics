@@ -51,20 +51,38 @@ export const Checkout: React.FC<CheckoutProps> = ({
   // GoAffPro Conversion Tracking for Order Success / Thank You screen
   useEffect(() => {
     if (confirmedOrder) {
-      const order_id = confirmedOrder.orderId || ("AURA-" + Date.now());
-      const order_total = confirmedOrder.grandTotal;
+      const orderId = confirmedOrder.orderId || ("AURA-" + Date.now());
+      const orderTotal = confirmedOrder.grandTotal;
 
-      const win = window as any;
-      win.goaffpro_order = {
-        order_id: order_id,
-        total: order_total
-      };
-
-      if (win.goaffproTrackConversion) {
-        win.goaffproTrackConversion(win.goaffpro_order);
+      if (typeof window !== 'undefined' && (window as any).Goaffpro) {
+        (window as any).Goaffpro.order = {
+          id: orderId,
+          total: orderTotal
+        };
+        (window as any).Goaffpro.track_order();
       }
 
+      // Handle async script loading retry
+      let tries = 0;
+      const timer = setInterval(() => {
+        tries++;
+        if (typeof window !== 'undefined' && (window as any).Goaffpro) {
+          (window as any).Goaffpro.order = {
+            id: orderId,
+            total: orderTotal
+          };
+          if (typeof (window as any).Goaffpro.track_order === 'function') {
+            (window as any).Goaffpro.track_order();
+          }
+          clearInterval(timer);
+        } else if (tries >= 20) {
+          clearInterval(timer);
+        }
+      }, 500);
+
       trackGoAffProConversion(confirmedOrder);
+
+      return () => clearInterval(timer);
     }
   }, [confirmedOrder?.orderId]);
 
@@ -162,9 +180,26 @@ export const Checkout: React.FC<CheckoutProps> = ({
     // Immediate assignment and trigger for GoAffPro tracking on Thank You screen
     if (typeof window !== 'undefined') {
       const win = window as any;
+      const oId = confirmedOrder.orderId || ("AURA-" + Date.now());
+      const oTotal = confirmedOrder.grandTotal;
+
+      if (win.Goaffpro) {
+        win.Goaffpro.order = {
+          id: oId,
+          total: oTotal
+        };
+        if (typeof win.Goaffpro.track_order === 'function') {
+          try {
+            win.Goaffpro.track_order();
+          } catch {
+            // safe
+          }
+        }
+      }
+
       win.goaffpro_order = {
-        order_id: confirmedOrder.orderId || ("AURA-" + Date.now()),
-        total: confirmedOrder.grandTotal
+        order_id: oId,
+        total: oTotal
       };
       if (typeof win.goaffproTrackConversion === 'function') {
         try {

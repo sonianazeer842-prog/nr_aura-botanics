@@ -11,11 +11,12 @@
 
 import { OrderSubmission } from '../types';
 
-export const GOAFFPRO_SHOP_ID = 'eajjgyb0ld';
-export const GOAFFPRO_PORTAL_URL = 'https://eajjgyb0ld.goaffpro.com/';
+export const GOAFFPRO_SHOP_ID = 'eajjgybld';
+export const GOAFFPRO_PORTAL_URL = 'https://eajjgybld.goaffpro.com/';
 
 declare global {
   interface Window {
+    Goaffpro?: any;
     goaffpro_order?: any;
     goaffproOrder?: any;
     goaffproTrackConversion?: (order: any) => void;
@@ -24,13 +25,30 @@ declare global {
 
 /**
  * Fires the GoAffPro conversion tracking code upon order completion.
- * Populates window.goaffpro_order and calls window.goaffproTrackConversion(window.goaffpro_order)
+ * Populates window.Goaffpro.order and calls window.Goaffpro.track_order()
  */
 export function trackGoAffProConversion(order: OrderSubmission): void {
   if (typeof window === 'undefined') return;
 
   const order_id = order.orderId || ("AURA-" + Date.now());
   const order_total = Number(order.grandTotal) || 0;
+
+  // 1. Goaffpro official SDK order tracking:
+  const win = window as any;
+  if (win.Goaffpro) {
+    win.Goaffpro.order = {
+      id: order_id,
+      total: order_total
+    };
+    if (typeof win.Goaffpro.track_order === 'function') {
+      try {
+        win.Goaffpro.track_order();
+        console.log('🌿 [Goaffpro] track_order() executed for order:', win.Goaffpro.order);
+      } catch (e) {
+        console.warn('⚠️ [Goaffpro] track_order error:', e);
+      }
+    }
+  }
 
   // Exact object requested:
   const goaffpro_order = {
